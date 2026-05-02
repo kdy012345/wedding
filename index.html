@@ -887,9 +887,56 @@ body { overflow-x: hidden; max-width: 100vw; }
   font-family:'Noto Sans KR',sans-serif;
   flex-shrink:0;
 }
+
+/* ── 꽃잎 애니메이션 ── */
+.petals-container{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:99;
+  overflow:hidden;
+}
+/* 라이트박스 열릴 때 꽃잎 숨김 */
+.lbox.on ~ * .petals-container,
+body.lbox-open .petals-container{
+  display:none;
+}
+.petal{
+  position:absolute;
+  top:-40px;
+  opacity:0;
+  animation:petalFall linear infinite;
+  will-change:transform,opacity;
+}
+.petal svg{
+  display:block;
+}
+@keyframes petalFall{
+  0%{
+    opacity:0;
+    transform:translateY(0) rotate(0deg) scale(1);
+  }
+  5%{opacity:0.85;}
+  85%{opacity:0.7;}
+  100%{
+    opacity:0;
+    transform:translateY(110vh) rotate(720deg) scale(0.8);
+  }
+}
+@keyframes petalSway{
+  0%{margin-left:0}
+  25%{margin-left:18px}
+  50%{margin-left:-8px}
+  75%{margin-left:22px}
+  100%{margin-left:0}
+}
 </style>
 </head>
 <body>
+<!-- ── 꽃잎 ── -->
+<div class="petals-container" id="petalsContainer"></div>
+
 <div class="wrap">
 
 <!-- BGM -->
@@ -1467,10 +1514,76 @@ document.querySelectorAll('.fade-in').forEach(el=>{
   new IntersectionObserver(([e],obs)=>{
     if(e.isIntersecting){
       el.classList.add('vis');
-      obs.unobserve(el); // 한 번 보이면 더 이상 감시 안 함
+      obs.unobserve(el);
     }
   },{threshold:0.08,rootMargin:'0px 0px -30px 0px'}).observe(el);
 });
+
+// ── 꽃잎 애니메이션 ──
+(function(){
+  const container = document.getElementById('petalsContainer');
+  if(!container) return;
+
+  // 꽃잎 SVG 모양 4종 (벚꽃 스타일)
+  const petalShapes = [
+    // 타원형 꽃잎
+    `<svg width="14" height="20" viewBox="0 0 14 20"><ellipse cx="7" cy="10" rx="5" ry="9" fill="COLOR" opacity="0.82" transform="rotate(-15 7 10)"/></svg>`,
+    // 둥근 꽃잎
+    `<svg width="16" height="16" viewBox="0 0 16 16"><ellipse cx="8" cy="8" rx="6" ry="7" fill="COLOR" opacity="0.78"/></svg>`,
+    // 살짝 뾰족한 꽃잎
+    `<svg width="12" height="22" viewBox="0 0 12 22"><path d="M6 0 C10 6 11 14 6 22 C1 14 2 6 6 0Z" fill="COLOR" opacity="0.8"/></svg>`,
+    // 작은 하트 꽃잎
+    `<svg width="14" height="13" viewBox="0 0 14 13"><path d="M7 12 C7 12 1 7 1 4 C1 1.8 2.8 0 5 0 C6 0 7 0.8 7 0.8 C7 0.8 8 0 9 0 C11.2 0 13 1.8 13 4 C13 7 7 12 7 12Z" fill="COLOR" opacity="0.75"/></svg>`,
+  ];
+
+  // 핑크/흰색 계열 색상
+  const colors = [
+    '#ffb7c5','#ffd6e0','#ffccd5','#ffe4ea',
+    '#ffc8d4','#fff0f3','#f9a8b8','#fde8ec',
+    '#ffffff','#fff5f7',
+  ];
+
+  const PETAL_COUNT = 18;
+
+  function createPetal(){
+    const div = document.createElement('div');
+    div.className = 'petal';
+
+    const shape = petalShapes[Math.floor(Math.random()*petalShapes.length)];
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    div.innerHTML = shape.replace('COLOR', color);
+
+    const left = Math.random()*100; // vw %
+    const duration = 14 + Math.random()*16; // 14~30초
+    const delay = Math.random()*15; // 0~15초 딜레이
+    const swayDuration = 3 + Math.random()*4;
+
+    div.style.cssText = `
+      left:${left}vw;
+      animation-duration:${duration}s;
+      animation-delay:${delay}s;
+      animation-name:petalFall;
+    `;
+    // 좌우 흔들림은 SVG에 별도 애니메이션
+    div.querySelector('svg').style.animation = `petalSway ${swayDuration}s ease-in-out infinite`;
+
+    container.appendChild(div);
+  }
+
+  for(let i=0;i<PETAL_COUNT;i++) createPetal();
+
+  // 라이트박스 열릴 때 꽃잎 숨기고 닫으면 다시 보이기
+  const origOpenLbox = window.openLbox;
+  const origCloseLbox = window.closeLbox;
+  window.openLbox = function(i){
+    container.style.display='none';
+    origOpenLbox(i);
+  };
+  window.closeLbox = function(){
+    origCloseLbox();
+    container.style.display='';
+  };
+})();
 </script>
 </body>
 </html>
