@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:title" content="현성 ♥ 다윤 결혼식에 초대합니다">
-<meta property="og:description" content="8/23 일 오후 14시 메종드아나하">
+<meta property="og:type" content="website">
+<meta property="og:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
+<meta property="og:description" content="2026년 8월 23일 일요일 오후 14시 · 메종드아나하">
+<meta property="og:image" content="https://kdy012345.github.io/wedding/cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://kdy012345.github.io/wedding/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
+<meta name="twitter:description" content="2026년 8월 23일 일요일 오후 14시 · 메종드아나하">
+<meta name="twitter:image" content="https://kdy012345.github.io/wedding/cover.jpg">
 <title>이현성 ❤️ 김다윤</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Special+Elite&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -1249,9 +1258,22 @@ function toggleAcc(btnId,bodyId){
 }
 
 // Modal
-function openModal(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
-function closeModal(id){document.getElementById(id).classList.remove('on');document.body.style.overflow='';}
-document.querySelectorAll('.modal-bg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)closeModal(el.id);})  );
+let _modalScrollY=0;
+function openModal(id){
+  _modalScrollY=window.scrollY;
+  document.body.style.position='fixed';
+  document.body.style.top='-'+_modalScrollY+'px';
+  document.body.style.width='100%';
+  document.getElementById(id).classList.add('on');
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('on');
+  document.body.style.position='';
+  document.body.style.top='';
+  document.body.style.width='';
+  window.scrollTo({top:_modalScrollY,behavior:'instant'});
+}
+document.querySelectorAll('.modal-bg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)closeModal(el.id);}));
 
 // Toggle
 function tog(btn){btn.closest('.tog-grp').querySelectorAll('.tog-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
@@ -1266,14 +1288,27 @@ function submitRsvp(){
 // Lightbox
 let lboxSrcs=[];
 let lboxIdx=0;
+let _lboxScrollY=0;
+
 function openLbox(i){
   lboxIdx=i;
   document.getElementById('lbox-img').src=lboxSrcs[i];
   document.getElementById('lbox-counter').textContent=(i+1)+' / '+lboxSrcs.length;
   document.getElementById('lbox').classList.add('on');
-  document.body.style.overflow='hidden';
+  // 스크롤 위치 저장 후 고정 (레이아웃 흔들림 방지)
+  _lboxScrollY = window.scrollY;
+  document.body.style.position='fixed';
+  document.body.style.top='-'+_lboxScrollY+'px';
+  document.body.style.width='100%';
 }
-function closeLbox(){document.getElementById('lbox').classList.remove('on');document.body.style.overflow='';}
+function closeLbox(){
+  document.getElementById('lbox').classList.remove('on');
+  // 스크롤 위치 복원
+  document.body.style.position='';
+  document.body.style.top='';
+  document.body.style.width='';
+  window.scrollTo({top:_lboxScrollY, behavior:'instant'});
+}
 function lboxNav(dir){
   lboxIdx=(lboxIdx+dir+lboxSrcs.length)%lboxSrcs.length;
   document.getElementById('lbox-img').src=lboxSrcs[lboxIdx];
@@ -1304,9 +1339,22 @@ function renderGb(){
   el.innerHTML=gbs.map((g,i)=>`<div class="gb-card-new" style="background:${postColors[i%postColors.length]}"><div class="gc-msg" style="font-size:0.75rem;color:#333;line-height:1.5;flex:1">${g.msg}</div><div class="gc-bottom" style="margin-top:0.5rem;padding-top:0.4rem;border-top:1px solid rgba(0,0,0,0.08)"><div class="gc-name" style="font-size:0.7rem;color:#555">${g.name}</div><div style="display:flex;justify-content:space-between;align-items:center"><span class="gc-pencil">✏</span><span class="gc-date" style="font-size:0.62rem;color:#999">${g.date}</span></div></div></div>`).join('');
 }
 
-function openGbModal(){document.getElementById('gbModal').classList.add('on');document.body.style.overflow='hidden';}
-function closeGbModal(){document.getElementById('gbModal').classList.remove('on');document.body.style.overflow='';}
-(function(){var _gm=document.getElementById('gbModal');if(_gm)_gm.addEventListener('click',e=>{if(e.target===this)closeGbModal();});})();
+let _gbScrollY=0;
+function openGbModal(){
+  _gbScrollY=window.scrollY;
+  document.body.style.position='fixed';
+  document.body.style.top='-'+_gbScrollY+'px';
+  document.body.style.width='100%';
+  document.getElementById('gbModal').classList.add('on');
+}
+function closeGbModal(){
+  document.getElementById('gbModal').classList.remove('on');
+  document.body.style.position='';
+  document.body.style.top='';
+  document.body.style.width='';
+  window.scrollTo({top:_gbScrollY,behavior:'instant'});
+}
+(function(){var _gm=document.getElementById('gbModal');if(_gm)_gm.addEventListener('click',e=>{if(e.target===_gm)closeGbModal();});})();
 function addGb(){
   const n=document.getElementById('gb-name').value.trim();
   const m=document.getElementById('gb-msg').value.trim();
