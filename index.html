@@ -895,41 +895,40 @@ body { overflow-x: hidden; max-width: 100vw; }
   width:100%;height:100%;
   pointer-events:none;
   z-index:99;
-  overflow:hidden;
+  overflow:visible;
 }
 /* 라이트박스 열릴 때 꽃잎 숨김 */
-.lbox.on ~ * .petals-container,
 body.lbox-open .petals-container{
   display:none;
 }
 .petal{
   position:absolute;
-  top:-40px;
+  top:-50px;
   opacity:0;
-  animation:petalFall linear infinite;
   will-change:transform,opacity;
 }
 .petal svg{
   display:block;
+  will-change:transform;
 }
 @keyframes petalFall{
   0%{
     opacity:0;
-    transform:translateY(0) rotate(0deg) scale(1);
+    transform:translateY(0) rotate(0deg);
   }
   5%{opacity:0.85;}
   85%{opacity:0.7;}
   100%{
     opacity:0;
-    transform:translateY(110vh) rotate(720deg) scale(0.8);
+    transform:translateY(115vh) rotate(600deg);
   }
 }
 @keyframes petalSway{
-  0%{margin-left:0}
-  25%{margin-left:18px}
-  50%{margin-left:-8px}
-  75%{margin-left:22px}
-  100%{margin-left:0}
+  0%  {transform:translateX(0px)   rotate(0deg);}
+  25% {transform:translateX(20px)  rotate(8deg);}
+  50% {transform:translateX(-10px) rotate(-5deg);}
+  75% {transform:translateX(24px)  rotate(6deg);}
+  100%{transform:translateX(0px)   rotate(0deg);}
 }
 </style>
 </head>
@@ -1553,19 +1552,16 @@ document.querySelectorAll('.fade-in').forEach(el=>{
     const color = colors[Math.floor(Math.random()*colors.length)];
     div.innerHTML = shape.replace('COLOR', color);
 
-    const left = Math.random()*100; // vw %
-    const duration = 14 + Math.random()*16; // 14~30초
-    const delay = Math.random()*15; // 0~15초 딜레이
+    const left = Math.random()*100;
+    const duration = 14 + Math.random()*16;
+    const delay = -(Math.random()*20); // 음수 딜레이로 처음부터 바로 보이게
     const swayDuration = 3 + Math.random()*4;
 
-    div.style.cssText = `
-      left:${left}vw;
-      animation-duration:${duration}s;
-      animation-delay:${delay}s;
-      animation-name:petalFall;
-    `;
-    // 좌우 흔들림은 SVG에 별도 애니메이션
-    div.querySelector('svg').style.animation = `petalSway ${swayDuration}s ease-in-out infinite`;
+    div.style.left = left + 'vw';
+    div.style.animation = `petalFall ${duration}s ${delay}s linear infinite`;
+
+    const svg = div.querySelector('svg');
+    svg.style.animation = `petalSway ${swayDuration}s ease-in-out infinite`;
 
     container.appendChild(div);
   }
@@ -1576,12 +1572,12 @@ document.querySelectorAll('.fade-in').forEach(el=>{
   const origOpenLbox = window.openLbox;
   const origCloseLbox = window.closeLbox;
   window.openLbox = function(i){
-    container.style.display='none';
+    document.body.classList.add('lbox-open');
     origOpenLbox(i);
   };
   window.closeLbox = function(){
     origCloseLbox();
-    container.style.display='';
+    document.body.classList.remove('lbox-open');
   };
 })();
 </script>
