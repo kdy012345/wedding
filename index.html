@@ -15,7 +15,11 @@
 <meta name="twitter:description" content="2026년 8월 23일 일요일 오후 14시 · 메종드아나하">
 <meta name="twitter:image" content="https://kdy012345.github.io/wedding/cover.jpg">
 <title>이현성 ❤️ 김다윤</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Special+Elite&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
+<!-- 폰트 비동기 로드 (렌더 블로킹 방지) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Special+Elite&family=Noto+Serif+KR:wght@300;400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Special+Elite&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet"></noscript>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
@@ -27,8 +31,21 @@
   --text-muted:#8a8a8a;
   --bg:#fff;
 }
-html,body{background:#e8f0f8;display:flex;justify-content:center;min-height:100vh;font-family:'Noto Sans KR',sans-serif;color:var(--text);-webkit-overflow-scrolling:touch;}
-.wrap{width:100%;max-width:480px;background:#fff;position:relative;overflow-x:clip;will-change:scroll-position;}
+html{
+  height:100%;
+  overscroll-behavior:none;
+}
+body{
+  background:#e8f0f8;
+  display:flex;
+  justify-content:center;
+  min-height:100%;
+  font-family:'Noto Sans KR',sans-serif;
+  color:var(--text);
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:none;
+}
+.wrap{width:100%;max-width:480px;background:#fff;position:relative;overflow-x:clip;}
 
 /* ── BGM BUTTON ── */
 .bgm-btn{
@@ -372,9 +389,9 @@ html,body{background:#e8f0f8;display:flex;justify-content:center;min-height:100v
 /* ── DAYS + CAKE ── */
 .days-section{
   background:#fff;
-  padding:3rem 1.8rem 2.5rem;
+  padding:1.8rem 1.5rem 1.5rem;
   text-align:center;
-  margin:1.5rem 1.2rem;
+  margin:1rem 1.2rem;
   border:1.5px solid #b8d8f0;
   border-radius:8px;
   position:relative;
@@ -395,33 +412,33 @@ html,body{background:#e8f0f8;display:flex;justify-content:center;min-height:100v
 }
 .days-label{
   font-family:'Noto Serif KR',serif;
-  font-size:1.8rem;
+  font-size:1.1rem;
   color:#3a3a3a;
-  margin-bottom:0.3rem;
+  margin-bottom:0.2rem;
 }
 .days-count{
   font-family:'Noto Serif KR',serif;
-  font-size:3.5rem;
+  font-size:2.2rem;
   color:#7ab8e0;
-  margin-bottom:1.5rem;
+  margin-bottom:0.8rem;
   letter-spacing:0.02em;
 }
 .cake-wrap{
   display:flex;
   justify-content:center;
-  margin-bottom:1.8rem;
+  margin-bottom:0.8rem;
 }
 .days-msg{
   font-family:'Noto Serif KR',serif;
-  font-size:1.05rem;
+  font-size:0.9rem;
   color:#5a5147;
-  line-height:2.2;
-  margin-bottom:1.2rem;
+  line-height:1.9;
+  margin-bottom:0.8rem;
 }
 .days-parents{
   font-family:'Noto Serif KR',serif;
-  font-size:0.85rem;color:#7a6e65;
-  line-height:2.2;margin-bottom:1.5rem;
+  font-size:0.82rem;color:#7a6e65;
+  line-height:2;margin-bottom:1rem;
   letter-spacing:0.05em;
 }
 .days-parents b{color:#3a3a3a;font-weight:600}
@@ -429,22 +446,22 @@ html,body{background:#e8f0f8;display:flex;justify-content:center;min-height:100v
 .days-divider{
   width:40px;height:1px;
   background:#d4c5b3;
-  margin:1.5rem auto;
+  margin:0.9rem auto;
 }
 .days-invite-msg{
   font-family:'Noto Serif KR',serif;
-  font-size:0.92rem;
+  font-size:0.85rem;
   color:#5a5147;
-  line-height:2.2;
+  line-height:2;
   text-align:center;
   font-weight:300;
 }
 .days-wedding-of{
   font-family:'Special Elite',cursive;
-  font-size:0.88rem;
+  font-size:0.82rem;
   color:var(--sky-mid);
   letter-spacing:0.15em;
-  margin-bottom:1rem;
+  margin-bottom:0.7rem;
   text-align:center;
 }
 .days-sign{
@@ -907,7 +924,7 @@ body { overflow-x: hidden; max-width: 100vw; }
 
   <!-- 케이크 SVG 일러스트 -->
   <div class="cake-wrap">
-    <svg viewBox="0 0 280 260" xmlns="http://www.w3.org/2000/svg" style="width:220px;height:auto">
+    <svg viewBox="0 0 280 260" xmlns="http://www.w3.org/2000/svg" style="width:140px;height:auto">
       <!-- 초들 -->
       <rect x="95" y="28" width="6" height="22" rx="3" fill="#f5e6c8" stroke="#e8d0a0" stroke-width="0.8"/>
       <rect x="113" y="22" width="6" height="28" rx="3" fill="#f5e6c8" stroke="#e8d0a0" stroke-width="0.8"/>
@@ -1258,20 +1275,15 @@ function toggleAcc(btnId,bodyId){
 }
 
 // Modal
-let _modalScrollY=0;
 function openModal(id){
-  _modalScrollY=window.scrollY;
-  document.body.style.position='fixed';
-  document.body.style.top='-'+_modalScrollY+'px';
-  document.body.style.width='100%';
-  document.getElementById(id).classList.add('on');
+  const el=document.getElementById(id);
+  el.classList.add('on');
+  el.addEventListener('touchmove',_preventScroll,{passive:false});
 }
 function closeModal(id){
-  document.getElementById(id).classList.remove('on');
-  document.body.style.position='';
-  document.body.style.top='';
-  document.body.style.width='';
-  window.scrollTo({top:_modalScrollY,behavior:'instant'});
+  const el=document.getElementById(id);
+  el.classList.remove('on');
+  el.removeEventListener('touchmove',_preventScroll);
 }
 document.querySelectorAll('.modal-bg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)closeModal(el.id);}));
 
@@ -1288,27 +1300,21 @@ function submitRsvp(){
 // Lightbox
 let lboxSrcs=[];
 let lboxIdx=0;
-let _lboxScrollY=0;
 
 function openLbox(i){
   lboxIdx=i;
+  const lbox=document.getElementById('lbox');
   document.getElementById('lbox-img').src=lboxSrcs[i];
   document.getElementById('lbox-counter').textContent=(i+1)+' / '+lboxSrcs.length;
-  document.getElementById('lbox').classList.add('on');
-  // 스크롤 위치 저장 후 고정 (레이아웃 흔들림 방지)
-  _lboxScrollY = window.scrollY;
-  document.body.style.position='fixed';
-  document.body.style.top='-'+_lboxScrollY+'px';
-  document.body.style.width='100%';
+  lbox.classList.add('on');
+  lbox.addEventListener('touchmove',_preventScroll,{passive:false});
 }
 function closeLbox(){
-  document.getElementById('lbox').classList.remove('on');
-  // 스크롤 위치 복원
-  document.body.style.position='';
-  document.body.style.top='';
-  document.body.style.width='';
-  window.scrollTo({top:_lboxScrollY, behavior:'instant'});
+  const lbox=document.getElementById('lbox');
+  lbox.classList.remove('on');
+  lbox.removeEventListener('touchmove',_preventScroll);
 }
+function _preventScroll(e){e.preventDefault();}
 function lboxNav(dir){
   lboxIdx=(lboxIdx+dir+lboxSrcs.length)%lboxSrcs.length;
   document.getElementById('lbox-img').src=lboxSrcs[lboxIdx];
@@ -1341,18 +1347,14 @@ function renderGb(){
 
 let _gbScrollY=0;
 function openGbModal(){
-  _gbScrollY=window.scrollY;
-  document.body.style.position='fixed';
-  document.body.style.top='-'+_gbScrollY+'px';
-  document.body.style.width='100%';
-  document.getElementById('gbModal').classList.add('on');
+  const el=document.getElementById('gbModal');
+  el.classList.add('on');
+  el.addEventListener('touchmove',_preventScroll,{passive:false});
 }
 function closeGbModal(){
-  document.getElementById('gbModal').classList.remove('on');
-  document.body.style.position='';
-  document.body.style.top='';
-  document.body.style.width='';
-  window.scrollTo({top:_gbScrollY,behavior:'instant'});
+  const el=document.getElementById('gbModal');
+  el.classList.remove('on');
+  el.removeEventListener('touchmove',_preventScroll);
 }
 (function(){var _gm=document.getElementById('gbModal');if(_gm)_gm.addEventListener('click',e=>{if(e.target===_gm)closeGbModal();});})();
 function addGb(){
