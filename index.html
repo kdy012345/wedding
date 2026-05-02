@@ -611,6 +611,7 @@ body { overflow-x: hidden; max-width: 100vw; }
   background:#9bbed2;
   padding:3rem 2rem 2.5rem;
   text-align:center;
+  margin-bottom:30svh;
 }
 .env-title-new{
   font-family:'Noto Serif KR',serif;
@@ -693,6 +694,7 @@ body { overflow-x: hidden; max-width: 100vw; }
 .gallery-section-new{
   background:#fff;
   padding:2.5rem 0 2rem;
+  margin-bottom:30svh;
 }
 .gallery-title-new{
   font-family:'Noto Serif KR',serif;
@@ -705,7 +707,7 @@ body { overflow-x: hidden; max-width: 100vw; }
 }
 .gallery-main-wrap{
   width:100%;
-  aspect-ratio:4/3;
+  aspect-ratio:3/4;
   overflow:hidden;
   margin-bottom:10px;
 }
@@ -741,9 +743,9 @@ body { overflow-x: hidden; max-width: 100vw; }
 .gallery-thumb.active{opacity:1;border-color:#9bbed2;}
 .gallery-thumb:hover{opacity:1;}
 
-.gallery-section-new{background:#fff;padding:2rem 0 1.5rem;}
+.gallery-section-new{background:#fff;padding:2rem 0 1.5rem;margin-bottom:30svh;}
 .gallery-title-new{font-family:'Noto Serif KR',serif;font-size:0.95rem;letter-spacing:0.35em;color:#2a2a2a;text-align:center;margin-bottom:1.5rem;font-weight:600;}
-.gallery-main-wrap{width:100%;aspect-ratio:4/3;overflow:hidden;margin-bottom:8px;cursor:pointer;}
+.gallery-main-wrap{width:100%;aspect-ratio:3/4;overflow:hidden;margin-bottom:8px;cursor:pointer;}
 .gallery-main-show{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
 .gallery-thumbs-wrap{display:flex;gap:4px;overflow-x:auto;padding:0 1rem 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 .gallery-thumbs-wrap::-webkit-scrollbar{display:none}
@@ -846,14 +848,6 @@ body { overflow-x: hidden; max-width: 100vw; }
   cursor:pointer;
   font-family:'Noto Sans KR',sans-serif;
   flex-shrink:0;
-}
-
-/* 갤러리 렌더링 최적화 */
-.gallery-main-wrap{contain:layout style;}
-.gallery-thumb{contain:layout style size;}
-.gallery-main-show{
-  image-rendering:auto;
-  -webkit-backface-visibility:hidden;
 }
 </style>
 </head>
@@ -1001,29 +995,10 @@ body { overflow-x: hidden; max-width: 100vw; }
 <section class="gallery-section-new fade-in">
   <div class="gallery-title-new">GALLERY</div>
   <div class="gallery-main-wrap" onclick="openLbox(galleryIdx)">
-    <img class="gallery-main-show" id="galleryMainImg" loading="eager" decoding="async" src="5.jpg" alt="">
+    <img class="gallery-main-show" id="galleryMainImg" src="5.jpg" alt="">
   </div>
-  <div class="gallery-thumbs-wrap">
-    <img class="gallery-thumb" src="5.jpg" alt="" onclick="openGallery(0)" id="thumb-0" loading="eager" decoding="async">
-    <img class="gallery-thumb" src="6.jpg" alt="" onclick="openGallery(1)" id="thumb-1" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="7.jpg" alt="" onclick="openGallery(2)" id="thumb-2" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="9.jpg" alt="" onclick="openGallery(3)" id="thumb-3" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="10.jpg" alt="" onclick="openGallery(4)" id="thumb-4" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="12.jpg" alt="" onclick="openGallery(5)" id="thumb-5" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="14.jpg" alt="" onclick="openGallery(6)" id="thumb-6" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="16.jpg" alt="" onclick="openGallery(7)" id="thumb-7" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="17.jpg" alt="" onclick="openGallery(8)" id="thumb-8" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="20.jpg" alt="" onclick="openGallery(9)" id="thumb-9" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="21.jpg" alt="" onclick="openGallery(10)" id="thumb-10" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="23.jpg" alt="" onclick="openGallery(11)" id="thumb-11" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="24.jpg" alt="" onclick="openGallery(12)" id="thumb-12" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="25.jpg" alt="" onclick="openGallery(13)" id="thumb-13" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="26.jpg" alt="" onclick="openGallery(14)" id="thumb-14" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="27.jpg" alt="" onclick="openGallery(15)" id="thumb-15" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="28.jpg" alt="" onclick="openGallery(16)" id="thumb-16" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="31.jpg" alt="" onclick="openGallery(17)" id="thumb-17" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="33.jpg" alt="" onclick="openGallery(18)" id="thumb-18" loading="lazy" decoding="async">
-    <img class="gallery-thumb" src="35.jpg" alt="" onclick="openGallery(19)" id="thumb-19" loading="lazy" decoding="async">
+  <div class="gallery-thumbs-wrap" id="galleryThumbsWrap">
+    <!-- GitHub API에서 자동으로 jpg 파일을 불러와 채워집니다 -->
   </div>
 </section>
 
@@ -1279,7 +1254,7 @@ function submitRsvp(){
 // RSVP 자동팝업 비활성화
 
 // Lightbox
-const lboxSrcs=["5.jpg","6.jpg","7.jpg","9.jpg","10.jpg","12.jpg","14.jpg","16.jpg","17.jpg","20.jpg","21.jpg","23.jpg","24.jpg","25.jpg","26.jpg","27.jpg","28.jpg","31.jpg","33.jpg","35.jpg"];
+let lboxSrcs=[];
 let lboxIdx=0;
 function openLbox(i){
   lboxIdx=i;
@@ -1395,37 +1370,38 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Gallery
-const galleryPhotos = ["5","6","7","9","10","12","14","16","17","20","21","23","24","25","26","27","28","31","33","35"];
+const galleryPhotos = ["5.jpg","6.jpg","7.jpg","9.jpg","10.jpg","12.jpg","14.jpg","16.jpg","17.jpg","20.jpg","21.jpg","23.jpg","24.jpg","25.jpg","26.jpg","27.jpg","28.jpg","31.jpg","33.jpg","35.jpg","38.jpg","40.jpg","42.jpg"];
 let galleryIdx = 0;
+
 function openGallery(i){
   galleryIdx = i;
   const main = document.getElementById('galleryMainImg');
-  if(main){
-    main.style.opacity='0.6';
-    main.src = galleryPhotos[i] + '.jpg';
-    main.onload = function(){ this.style.opacity='1'; this.style.transition='opacity 0.2s'; };
-  }
+  if(main) main.src = galleryPhotos[i];
   document.querySelectorAll('.gallery-thumb').forEach((t,j) => t.classList.toggle('active', i===j));
   const th = document.getElementById('thumb-'+i);
   if(th) th.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
-  // 다음 이미지 미리 로딩
-  if(galleryPhotos[i+1]){
-    const pre = new Image();
-    pre.src = galleryPhotos[i+1] + '.jpg';
-  }
 }
-window.addEventListener('DOMContentLoaded', () => {
-  const t = document.getElementById('thumb-0');
-  if(t) t.classList.add('active');
-});
 
-
-// 갤러리 첫 5장 preload
-window.addEventListener('load', function(){
-  galleryPhotos.slice(0,5).forEach(function(k){
-    var img = new Image();
-    img.src = k + '.jpg';
+function buildGallery(){
+  lboxSrcs = galleryPhotos;
+  const thumbsWrap = document.getElementById('galleryThumbsWrap');
+  const mainImg = document.getElementById('galleryMainImg');
+  if(!thumbsWrap) return;
+  thumbsWrap.innerHTML = '';
+  galleryPhotos.forEach((src, i) => {
+    const img = document.createElement('img');
+    img.className = 'gallery-thumb' + (i===0?' active':'');
+    img.src = src;
+    img.alt = '';
+    img.id = 'thumb-'+i;
+    img.onclick = () => openGallery(i);
+    thumbsWrap.appendChild(img);
   });
+  if(mainImg) mainImg.src = galleryPhotos[0];
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  buildGallery();
 });
 
 // Fade in
