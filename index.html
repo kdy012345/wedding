@@ -731,7 +731,8 @@ body { overflow-x: hidden; max-width: 100vw; }
 .gallery-grid-wrap{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:3px;
+  gap:8px;
+  padding:0 12px;
 }
 .gallery-grid-wrap img{
   width:100%;
@@ -740,6 +741,7 @@ body { overflow-x: hidden; max-width: 100vw; }
   object-position:center;
   display:block;
   cursor:pointer;
+  border-radius:4px;
   transition:opacity 0.2s;
 }
 .gallery-grid-wrap img:hover{opacity:0.85;}
