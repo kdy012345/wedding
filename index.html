@@ -70,9 +70,10 @@ html { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
 html{
   min-height:100%;
   touch-action:pan-y;
+  background:#888;
 }
 body{
-  background:#e8f0f8;
+  background:#888;
   min-height:100dvh;
   font-family:'Noto Sans KR',sans-serif;
   color:var(--text);
@@ -81,9 +82,18 @@ body{
   align-items:flex-start;
   -webkit-overflow-scrolling:touch;
   touch-action:pan-y;
-  background-color:#888;
 }
-.wrap{width:100%;max-width:480px;background:#fff;position:relative;overflow-x:clip;min-height:100dvh;touch-action:pan-y;box-shadow:0 0 40px rgba(0,0,0,0.25);}
+.wrap{
+  width:100%;
+  max-width:480px;
+  background:#fff;
+  position:relative;
+  overflow-x:clip;
+  min-height:100dvh;
+  touch-action:pan-y;
+  box-shadow:0 0 60px rgba(0,0,0,0.4);
+  flex-shrink:0;
+}
 
 /* ── BGM BUTTON ── */
 .bgm-btn{
@@ -1306,8 +1316,8 @@ body.lbox-open .petals-container{
       display:block;
       width:100%;
       padding:0.85rem 0;
-      background:#e7f4fd;
-      color:#4a7fa0;
+      background:#a2c2d7;
+      color:#fff;
       text-align:center;
       font-size:0.82rem;
       font-family:'Noto Sans KR',sans-serif;
@@ -1316,6 +1326,8 @@ body.lbox-open .petals-container{
       letter-spacing:0.03em;
     ">지도를 자세히 보려면 여기를 눌러주세요</a>
   </div>
+
+  <div style="height:14px;"></div>
 
   <div class="map-btns-3">
     <a class="map-btn-3" href="https://www.tmap.co.kr/search/searchMapDetailLsit.do?searchCate=place&searchKeyword=서울+강남구+언주로+517+메종드아나하" target="_blank">
@@ -1559,12 +1571,10 @@ function toggleAcc(btnId,bodyId){
 function openModal(id){
   const el=document.getElementById(id);
   el.classList.add('on');
-  el.addEventListener('touchmove',_preventScroll,{passive:false});
 }
 function closeModal(id){
   const el=document.getElementById(id);
   el.classList.remove('on');
-  el.removeEventListener('touchmove',_preventScroll);
 }
 document.querySelectorAll('.modal-bg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)closeModal(el.id);}));
 
@@ -1622,34 +1632,57 @@ window.addEventListener('DOMContentLoaded', function(){
 // Lightbox
 let lboxSrcs=[];
 let lboxIdx=0;
+let lboxScale=1, lboxStartDist=0, lboxLastScale=1;
+
+function getDist(t){ return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
+
+function lboxTouchStart(e){
+  if(e.touches.length===2){ e.preventDefault(); lboxStartDist=getDist(e.touches); }
+}
+function lboxTouchMove(e){
+  if(e.touches.length===2){
+    e.preventDefault();
+    const dist=getDist(e.touches);
+    lboxScale=Math.min(Math.max(lboxLastScale*(dist/lboxStartDist),1),4);
+    document.getElementById('lbox-img').style.transform='scale('+lboxScale+')';
+  }
+}
+function lboxTouchEnd(e){
+  if(e.touches.length<2){ lboxLastScale=lboxScale; }
+  if(lboxScale<1.05){ lboxScale=1; lboxLastScale=1; document.getElementById('lbox-img').style.transform='scale(1)'; }
+}
 
 function openLbox(i){
-  lboxIdx=i;
-  const lbox=document.getElementById('lbox');
-  document.getElementById('lbox-img').src=lboxSrcs[i];
+  lboxIdx=i; lboxScale=1; lboxLastScale=1;
+  const img=document.getElementById('lbox-img');
+  img.style.transform='scale(1)';
+  img.src=lboxSrcs[i];
   document.getElementById('lbox-counter').textContent=(i+1)+' / '+lboxSrcs.length;
-  lbox.classList.add('on');
-  lbox.addEventListener('touchmove',_preventScroll,{passive:false});
+  document.getElementById('lbox').classList.add('on');
+  img.addEventListener('touchstart',lboxTouchStart,{passive:false});
+  img.addEventListener('touchmove',lboxTouchMove,{passive:false});
+  img.addEventListener('touchend',lboxTouchEnd,{passive:true});
 }
 function closeLbox(){
-  const lbox=document.getElementById('lbox');
-  lbox.classList.remove('on');
-  lbox.removeEventListener('touchmove',_preventScroll);
+  const img=document.getElementById('lbox-img');
+  document.getElementById('lbox').classList.remove('on');
+  img.removeEventListener('touchstart',lboxTouchStart);
+  img.removeEventListener('touchmove',lboxTouchMove);
+  img.removeEventListener('touchend',lboxTouchEnd);
+  img.style.transform='scale(1)';
+  lboxScale=1; lboxLastScale=1;
 }
 function _preventScroll(e){
-  // 두 손가락 핀치줌은 허용
   if(e.touches && e.touches.length > 1) return;
-  // 모달 내부에서만 차단
-  const modal = e.target.closest('.modal-bg, .gb-write-modal, .lbox');
-  if(!modal) return;
-  // 모달 내부 스크롤 가능한 요소는 허용
   const scrollable = e.target.closest('.modal, .gb-write-box');
   if(scrollable && scrollable.scrollHeight > scrollable.clientHeight) return;
   e.preventDefault();
 }
 function lboxNav(dir){
   lboxIdx=(lboxIdx+dir+lboxSrcs.length)%lboxSrcs.length;
-  document.getElementById('lbox-img').src=lboxSrcs[lboxIdx];
+  const img=document.getElementById('lbox-img');
+  img.src=lboxSrcs[lboxIdx];
+  img.style.transform='scale(1)'; lboxScale=1; lboxLastScale=1;
   document.getElementById('lbox-counter').textContent=(lboxIdx+1)+' / '+lboxSrcs.length;
 }
 (function(){var _lb=document.getElementById('lbox');if(_lb)_lb.addEventListener('click',function(e){
@@ -1675,12 +1708,10 @@ let _gbScrollY = 0;
 function openGbModal() {
   const el = document.getElementById('gbModal');
   el.classList.add('on');
-  el.addEventListener('touchmove', _preventScroll, {passive: false});
 }
 function closeGbModal() {
   const el = document.getElementById('gbModal');
   el.classList.remove('on');
-  el.removeEventListener('touchmove', _preventScroll);
 }
 // ── RSVP Firebase 저장 ──
 window.openGbModal = openGbModal;
@@ -1907,12 +1938,12 @@ document.querySelectorAll('.fade-in').forEach(el=>{
       if(!mapDiv) return;
 
       const geocoder = new kakao.maps.services.Geocoder();
-      geocoder.addressSearch('서울 강남구 언주로 517 메종드아나하', function(result, status) {
+      geocoder.addressSearch('서울 강남구 언주로 517', function(result, status) {
         let coords;
         if(status === kakao.maps.services.Status.OK) {
           coords = new kakao.maps.LatLng(result[0].y, result[0].x);
         } else {
-          coords = new kakao.maps.LatLng(37.5094, 127.0289);
+          coords = new kakao.maps.LatLng(37.5048, 127.0333);
         }
 
         const map = new kakao.maps.Map(mapDiv, {
