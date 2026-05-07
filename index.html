@@ -16,30 +16,32 @@
 <meta name="twitter:image" content="https://kdy012345.github.io/wedding/cover.jpg">
 <title>이현성 ❤️ 김다윤</title>
 <!-- 갤러리 이미지 preload -->
-<link rel="preload" as="image" href="5.jpg">
-<link rel="preload" as="image" href="6.jpg">
-<link rel="preload" as="image" href="7.jpg">
-<link rel="preload" as="image" href="9.jpg">
-<link rel="preload" as="image" href="10.jpg">
-<link rel="preload" as="image" href="12.jpg">
-<link rel="preload" as="image" href="14.jpg">
-<link rel="preload" as="image" href="16.jpg">
-<link rel="preload" as="image" href="17.jpg">
-<link rel="preload" as="image" href="20.jpg">
-<link rel="preload" as="image" href="21.jpg">
-<link rel="preload" as="image" href="23.jpg">
-<link rel="preload" as="image" href="24.jpg">
-<link rel="preload" as="image" href="25.jpg">
-<link rel="preload" as="image" href="26.jpg">
-<link rel="preload" as="image" href="27.jpg">
-<link rel="preload" as="image" href="28.jpg">
-<link rel="preload" as="image" href="29.jpg">
-<link rel="preload" as="image" href="31.jpg">
-<link rel="preload" as="image" href="33.jpg">
-<link rel="preload" as="image" href="35.jpg">
-<link rel="preload" as="image" href="38.jpg">
-<link rel="preload" as="image" href="40.jpg">
-<link rel="preload" as="image" href="42.jpg">
+<link rel="preload" as="image" href="5.webp">
+<link rel="preload" as="image" href="6.webp">
+<link rel="preload" as="image" href="3.webp">
+<link rel="preload" as="image" href="9.webp">
+<link rel="preload" as="image" href="10.webp">
+<link rel="preload" as="image" href="12.webp">
+<link rel="preload" as="image" href="14.webp">
+<link rel="preload" as="image" href="16.webp">
+<link rel="preload" as="image" href="17.webp">
+<link rel="preload" as="image" href="20.webp">
+<link rel="preload" as="image" href="7.webp">
+<link rel="preload" as="image" href="21.webp">
+<link rel="preload" as="image" href="23.webp">
+<link rel="preload" as="image" href="24.webp">
+<link rel="preload" as="image" href="25.webp">
+<link rel="preload" as="image" href="26.webp">
+<link rel="preload" as="image" href="27.webp">
+<link rel="preload" as="image" href="28.webp">
+<link rel="preload" as="image" href="29.webp">
+<link rel="preload" as="image" href="31.webp">
+<link rel="preload" as="image" href="32.webp">
+<link rel="preload" as="image" href="40.webp">
+<link rel="preload" as="image" href="33.webp">
+<link rel="preload" as="image" href="35.webp">
+<link rel="preload" as="image" href="38.webp">
+<link rel="preload" as="image" href="42.webp">
 <!-- 카카오 SDK (지도 + 공유) -->
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous"></script>
 <script>
@@ -1480,7 +1482,7 @@ body.lbox-open .petals-container{
 <div class="welcome-popup-bg" id="welcomePopup" style="display:none">
   <div class="welcome-popup">
     <button class="welcome-popup-close" onclick="closeWelcomePopup()">✕</button>
-    <div class="welcome-popup-title">참석 여부 체크3</div>
+    <div class="welcome-popup-title">참석 여부 체크</div>
     <div style="border-top:1px solid #e8e8e8;margin:0.8rem 0;"></div>
     <div class="welcome-popup-names">이현성 <span class="heart">♥</span> 김다윤</div>
     <div class="welcome-popup-info">
@@ -1860,7 +1862,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Gallery
-const galleryPhotos = ["5.jpg","6.jpg","7.jpg","9.jpg","10.jpg","12.jpg","14.jpg","16.jpg","17.jpg","20.jpg","21.jpg","23.jpg","24.jpg","25.jpg","26.jpg","27.jpg","28.jpg","29.jpg","31.jpg","33.jpg","35.jpg","38.jpg","40.jpg","42.jpg"];
+const galleryPhotos = ["5.webp","6.webp","3.webp","9.webp","10.webp","12.webp","14.webp","16.webp","17.webp","20.webp","7.webp","21.webp","23.webp","24.webp","25.webp","26.webp","27.webp","28.webp","29.webp","31.webp","32.webp","40.webp","33.webp","35.webp","38.webp","42.webp"];
 let galleryIdx = 0;
 
 // 갤러리 이미지 미리 preload
@@ -2026,18 +2028,24 @@ document.querySelectorAll('.fade-in').forEach(el=>{
           coords = new kakao.maps.LatLng(37.5048, 127.0333);
         }
 
-        // 마커보다 지도 중심을 약간 남쪽(아래)으로 → 마커가 위쪽에 표시
-        const centerOffset = new kakao.maps.LatLng(
-          parseFloat(coords.getLat()) - 0.003,
-          parseFloat(coords.getLng())
+        // 마커 위치를 두 번째 사진처럼 KT플라자 위쪽으로 수동 보정
+        const markerCoords = new kakao.maps.LatLng(
+          parseFloat(coords.getLat()) + 0.0015,
+          parseFloat(coords.getLng()) - 0.0005
+        );
+
+        // 지도 중심은 마커보다 약간 아래로 → 마커가 상단에 표시
+        const centerCoords = new kakao.maps.LatLng(
+          parseFloat(markerCoords.getLat()) - 0.002,
+          parseFloat(markerCoords.getLng())
         );
 
         const map = new kakao.maps.Map(mapDiv, {
-          center: centerOffset,
+          center: centerCoords,
           level: 3
         });
 
-        const marker = new kakao.maps.Marker({ position: coords, map });
+        const marker = new kakao.maps.Marker({ position: markerCoords, map });
 
         const infoWindow = new kakao.maps.InfoWindow({
           content: '<div style="padding:8px 12px;font-size:13px;font-family:\'Noto Sans KR\',sans-serif;font-weight:600;color:#3a3a3a;white-space:nowrap;">메종드아나하<br><span style="font-size:11px;color:#888;font-weight:400;">강남구 언주로 517 B1F</span></div>'
