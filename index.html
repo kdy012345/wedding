@@ -25,23 +25,6 @@
 <link rel="preload" as="image" href="14.webp">
 <link rel="preload" as="image" href="16.webp">
 <link rel="preload" as="image" href="17.webp">
-<link rel="preload" as="image" href="20.webp">
-<link rel="preload" as="image" href="7.webp">
-<link rel="preload" as="image" href="21.webp">
-<link rel="preload" as="image" href="23.webp">
-<link rel="preload" as="image" href="24.webp">
-<link rel="preload" as="image" href="25.webp">
-<link rel="preload" as="image" href="26.webp">
-<link rel="preload" as="image" href="27.webp">
-<link rel="preload" as="image" href="28.webp">
-<link rel="preload" as="image" href="29.webp">
-<link rel="preload" as="image" href="31.webp">
-<link rel="preload" as="image" href="32.webp">
-<link rel="preload" as="image" href="40.webp">
-<link rel="preload" as="image" href="33.webp">
-<link rel="preload" as="image" href="35.webp">
-<link rel="preload" as="image" href="38.webp">
-<link rel="preload" as="image" href="42.webp">
 <!-- 카카오 SDK (지도 + 공유) -->
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous"></script>
 <script>
@@ -1866,13 +1849,6 @@ const galleryPhotos = ["5.webp","6.webp","3.webp","9.webp","10.webp","12.webp","
 let galleryIdx = 0;
 
 // 갤러리 이미지 미리 preload
-function preloadGallery(){
-  galleryPhotos.forEach(src => {
-    const img = new Image();
-    img.src = src;
-  });
-}
-
 function openGallery(i){
   galleryIdx = i;
   const main = document.getElementById('galleryMainImg');
@@ -1891,16 +1867,15 @@ function buildGallery(){
     const img = document.createElement('img');
     img.src = src;
     img.alt = '';
-    img.loading = 'eager';
-    img.decoding = 'sync';
-    img.fetchpriority = 'high';
+    img.loading = i < 9 ? 'eager' : 'lazy';
+    img.decoding = i < 9 ? 'sync' : 'async';
+    if(i < 9) img.fetchpriority = 'high';
     img.onclick = () => openLbox(i);
     wrap.appendChild(img);
   });
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  preloadGallery();
   buildGallery();
 });
 
@@ -2028,9 +2003,9 @@ document.querySelectorAll('.fade-in').forEach(el=>{
           coords = new kakao.maps.LatLng(37.5048, 127.0333);
         }
 
-        // 마커 위치를 두 번째 사진처럼 KT플라자 위쪽으로 수동 보정
+        // 마커 위치를 실제 메종드아나하 위치로 보정
         const markerCoords = new kakao.maps.LatLng(
-          parseFloat(coords.getLat()) + 0.0015,
+          parseFloat(coords.getLat()) + 0.003,
           parseFloat(coords.getLng()) - 0.0005
         );
 
