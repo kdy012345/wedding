@@ -1465,7 +1465,7 @@ body.lbox-open .petals-container{
 <div class="welcome-popup-bg" id="welcomePopup" style="display:none">
   <div class="welcome-popup">
     <button class="welcome-popup-close" onclick="closeWelcomePopup()">✕</button>
-    <div class="welcome-popup-title">참석 여부 체크1</div>
+    <div class="welcome-popup-title">참석 여부 체크</div>
     <div style="border-top:1px solid #e8e8e8;margin:0.8rem 0;"></div>
     <div class="welcome-popup-names">이현성 <span class="heart">♥</span> 김다윤</div>
     <div class="welcome-popup-info">
@@ -2003,16 +2003,10 @@ document.querySelectorAll('.fade-in').forEach(el=>{
           coords = new kakao.maps.LatLng(37.5048, 127.0333);
         }
 
-        // 마커 위치를 실제 메종드아나하 위치로 보정
-        const markerCoords = new kakao.maps.LatLng(
-          parseFloat(coords.getLat()) + 0.003,
-          parseFloat(coords.getLng()) - 0.0005
-        );
-
-        // 지도 중심은 마커보다 약간 아래로 → 마커가 상단에 표시
+        // 지도 중심을 마커보다 약간 아래로 → 마커가 상단에 보임
         const centerCoords = new kakao.maps.LatLng(
-          parseFloat(markerCoords.getLat()) - 0.002,
-          parseFloat(markerCoords.getLng())
+          parseFloat(coords.getLat()) - 0.002,
+          parseFloat(coords.getLng())
         );
 
         const map = new kakao.maps.Map(mapDiv, {
@@ -2020,7 +2014,7 @@ document.querySelectorAll('.fade-in').forEach(el=>{
           level: 3
         });
 
-        const marker = new kakao.maps.Marker({ position: markerCoords, map });
+        const marker = new kakao.maps.Marker({ position: coords, map });
 
         const infoWindow = new kakao.maps.InfoWindow({
           content: '<div style="padding:8px 12px;font-size:13px;font-family:\'Noto Sans KR\',sans-serif;font-weight:600;color:#3a3a3a;white-space:nowrap;">메종드아나하<br><span style="font-size:11px;color:#888;font-weight:400;">강남구 언주로 517 B1F</span></div>'
