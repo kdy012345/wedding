@@ -1954,8 +1954,15 @@ window.addEventListener('DOMContentLoaded', () => {
 function shareKakao(){
   const pageUrl = 'https://kdy012345.github.io/wedding/index.html';
 
-  if(typeof Kakao === 'undefined'){
-    showKakaoGuide(); return;
+  // Kakao SDK 및 Share 모듈 체크
+  if(typeof Kakao === 'undefined' || !Kakao.Share){
+    // SDK 재시도
+    if(typeof Kakao !== 'undefined' && !Kakao.isInitialized()){
+      Kakao.init('e4664a7a38c753ac8b404b9a00de890a');
+    }
+    if(typeof Kakao === 'undefined' || !Kakao.Share){
+      showKakaoGuide(); return;
+    }
   }
 
   Kakao.Share.sendDefault({
