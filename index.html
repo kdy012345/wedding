@@ -6,14 +6,14 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
 <meta property="og:description" content="2026년 8월 23일 일요일 오후 2시&#10;메종드아나하, 서울">
-<meta property="og:image" content="https://kdy012345.github.io/wedding/cover.webp">
+<meta property="og:image" content="https://kdy012345.github.io/wedding/og-cover.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://kdy012345.github.io/wedding/index.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
 <meta name="twitter:description" content="2026년 8월 23일 일요일 오후 2시&#10;메종드아나하, 서울">
-<meta name="twitter:image" content="https://kdy012345.github.io/wedding/cover.webp">
+<meta name="twitter:image" content="https://kdy012345.github.io/wedding/og-cover.jpg">
 <title>이현성 ❤️ 김다윤</title>
 <!-- 갤러리 이미지 preload -->
 <link rel="preload" as="image" href="5.webp">
@@ -1968,6 +1968,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // 카카오톡 공유
 function shareKakao(){
   const pageUrl = 'https://kdy012345.github.io/wedding/index.html';
+  const imageUrl = 'https://kdy012345.github.io/wedding/og-cover.jpg';
 
   // Kakao SDK가 없으면 fallback
   if(typeof Kakao === 'undefined'){
@@ -1983,10 +1984,26 @@ function shareKakao(){
     shareKakaoFallback(pageUrl); return;
   }
 
-  // sendScrap: 카카오가 URL의 OG 태그를 직접 읽어서 전송
-  // → 카드 전체가 클릭 가능한 링크로 표시됨
-  Kakao.Share.sendScrap({
-    requestUrl: pageUrl
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
+      description: '2026년 8월 23일 일요일 오후 2시 · 메종드아나하, 서울',
+      imageUrl: imageUrl,
+      link: {
+        mobileWebUrl: pageUrl,
+        webUrl: pageUrl
+      }
+    },
+    buttons: [
+      {
+        title: '모바일 청첩장 확인하기',
+        link: {
+          mobileWebUrl: pageUrl,
+          webUrl: pageUrl
+        }
+      }
+    ]
   });
 }
 
