@@ -1968,8 +1968,9 @@ window.addEventListener('DOMContentLoaded', () => {
 // 카카오톡 공유
 function shareKakao(){
   const pageUrl = 'https://kdy012345.github.io/wedding/index.html';
+  const imageUrl = 'https://kdy012345.github.io/wedding/cover.webp';
 
-  // Kakao SDK가 없으면 바로 fallback
+  // Kakao SDK가 없으면 fallback
   if(typeof Kakao === 'undefined'){
     shareKakaoFallback(pageUrl); return;
   }
@@ -1979,27 +1980,31 @@ function shareKakao(){
     Kakao.init(window.KAKAO_APP_KEY || 'e4664a7a38c753ac8b404b9a00de890a');
   }
 
-  // scrap 방식: URL의 OG 태그를 카카오가 직접 읽어서 이미지+링크 함께 전송
-  // → 링크 붙여넣기와 동일한 결과물 보장
-  if(Kakao.Share && typeof Kakao.Share.sendScrap === 'function'){
-    try {
-      Kakao.Share.sendScrap({
-        requestUrl: pageUrl,
-        templateId: undefined
-      });
-      return;
-    } catch(e){ console.warn('Kakao.Share.sendScrap 실패:', e); }
+  if(!Kakao.Share || typeof Kakao.Share.sendDefault !== 'function'){
+    shareKakaoFallback(pageUrl); return;
   }
 
-  if(Kakao.Link && typeof Kakao.Link.sendScrap === 'function'){
-    try {
-      Kakao.Link.sendScrap({ requestUrl: pageUrl });
-      return;
-    } catch(e){ console.warn('Kakao.Link.sendScrap 실패:', e); }
-  }
-
-  // 모두 실패 시 fallback
-  shareKakaoFallback(pageUrl);
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
+      description: '2026년 8월 23일 일요일 오후 2시 · 메종드아나하, 서울',
+      imageUrl: imageUrl,
+      link: {
+        mobileWebUrl: pageUrl,
+        webUrl: pageUrl
+      }
+    },
+    buttons: [
+      {
+        title: '모바일 청첩장 보기',
+        link: {
+          mobileWebUrl: pageUrl,
+          webUrl: pageUrl
+        }
+      }
+    ]
+  });
 }
 
 // 카카오 SDK 없을 때 - Web Share API 또는 링크 복사
