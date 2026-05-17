@@ -25,13 +25,27 @@
 <link rel="preload" as="image" href="14.webp">
 <link rel="preload" as="image" href="16.webp">
 <link rel="preload" as="image" href="17.webp">
-<!-- 카카오 SDK (지도 + 공유) -->
-<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4" crossorigin="anonymous"></script>
+<!-- 카카오 SDK (지도 + 공유)
+     [필수 설정] developers.kakao.com 에서 아래 확인:
+     1. 내 앱 > 앱 설정 > 플랫폼 > Web: https://kdy012345.github.io 등록
+     2. 내 앱 > 제품 설정 > 카카오 로그인: 활성화
+     3. 내 앱 > 제품 설정 > 카카오톡 공유: 활성화
+-->
 <script>
   window.KAKAO_APP_KEY = 'e4664a7a38c753ac8b404b9a00de890a';
-  if(typeof Kakao !== 'undefined' && !Kakao.isInitialized()){
-    Kakao.init(window.KAKAO_APP_KEY);
-  }
+  // SDK를 동적으로 로드하여 초기화 타이밍 보장
+  (function(){
+    var s = document.createElement('script');
+    s.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js';
+    s.crossOrigin = 'anonymous';
+    s.onload = function(){
+      if(typeof Kakao !== 'undefined' && !Kakao.isInitialized()){
+        Kakao.init(window.KAKAO_APP_KEY);
+        console.log('Kakao SDK initialized. Share available:', !!Kakao.Share);
+      }
+    };
+    document.head.appendChild(s);
+  })();
 </script>
 <!-- 폰트 비동기 로드 (렌더 블로킹 방지) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1956,20 +1970,7 @@ function shareKakao(){
   const pageUrl = 'https://kdy012345.github.io/wedding/index.html';
   const ogImageUrl = 'https://kdy012345.github.io/wedding/og-cover.webp';
 
-  // Kakao SDK 초기화 보장
-  if(typeof Kakao === 'undefined'){
-    showKakaoGuide(); return;
-  }
-  if(!Kakao.isInitialized()){
-    Kakao.init(window.KAKAO_APP_KEY || 'e4664a7a38c753ac8b404b9a00de890a');
-  }
-
-  // Share 모듈 존재 확인
-  if(!Kakao.Share){
-    showKakaoGuide(); return;
-  }
-
-  Kakao.Share.sendDefault({
+  const shareParams = {
     objectType: 'feed',
     content: {
       title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
@@ -1989,7 +1990,51 @@ function shareKakao(){
         webUrl: pageUrl
       }
     }]
-  });
+  };
+
+  // Kakao SDK가 없으면 바로 fallback
+  if(typeof Kakao === 'undefined'){
+    shareKakaoFallback(pageUrl); return;
+  }
+
+  // 초기화 보장
+  if(!Kakao.isInitialized()){
+    Kakao.init(window.KAKAO_APP_KEY || 'e4664a7a38c753ac8b404b9a00de890a');
+  }
+
+  // Kakao.Share 시도 (SDK v2.x)
+  if(Kakao.Share && typeof Kakao.Share.sendDefault === 'function'){
+    try {
+      Kakao.Share.sendDefault(shareParams);
+      return;
+    } catch(e){ console.warn('Kakao.Share 실패:', e); }
+  }
+
+  // Kakao.Link 시도 (구버전 SDK fallback)
+  if(Kakao.Link && typeof Kakao.Link.sendDefault === 'function'){
+    try {
+      Kakao.Link.sendDefault(shareParams);
+      return;
+    } catch(e){ console.warn('Kakao.Link 실패:', e); }
+  }
+
+  // 모두 실패 시 fallback
+  shareKakaoFallback(pageUrl);
+}
+
+// 카카오 SDK 없을 때 - Web Share API 또는 링크 복사
+function shareKakaoFallback(pageUrl){
+  // 모바일 Web Share API 지원 시 시스템 공유시트 오픈 (카카오톡 선택 가능)
+  if(navigator.share){
+    navigator.share({
+      title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
+      text: '2026년 8월 23일 일요일 오후 2시 · 메종드아나하, 서울',
+      url: pageUrl
+    }).catch(function(){});
+    return;
+  }
+  // 최후 fallback: 링크 복사 안내
+  showKakaoGuide();
 }
 document.querySelectorAll('.fade-in').forEach(el=>{
   new IntersectionObserver(([e],obs)=>{
