@@ -1950,7 +1950,7 @@ window.addEventListener('DOMContentLoaded', () => {
   buildGallery();
 });
 
-// 카카오톡 공유 (sharer 팝업 방식 - 친구 선택 후 OG 카드로 자동 전달)
+// 카카오톡 공유
 function shareKakao(){
   const pageUrl = 'https://kdy012345.github.io/wedding/index.html';
 
@@ -1958,9 +1958,26 @@ function shareKakao(){
     showKakaoGuide(); return;
   }
 
-  Kakao.Share.sendScrap({
-    requestUrl: pageUrl,
-    templateId: undefined
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
+      description: '2026년 8월 23일 일요일 오후 2시 · 메종드아나하, 서울',
+      imageUrl: 'https://kdy012345.github.io/wedding/cover.webp',
+      imageWidth: 2000,
+      imageHeight: 2984,
+      link: {
+        mobileWebUrl: pageUrl,
+        webUrl: pageUrl
+      }
+    },
+    buttons: [{
+      title: '모바일 청첩장 보기',
+      link: {
+        mobileWebUrl: pageUrl,
+        webUrl: pageUrl
+      }
+    }]
   });
 }
 document.querySelectorAll('.fade-in').forEach(el=>{
