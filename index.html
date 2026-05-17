@@ -1484,7 +1484,7 @@ body.lbox-open .petals-container{
 <div class="welcome-popup-bg" id="welcomePopup" style="display:none;visibility:hidden">
   <div class="welcome-popup">
     <button class="welcome-popup-close" onclick="closeWelcomePopup()">✕</button>
-    <div class="welcome-popup-title">참석 여부 체크2</div>
+    <div class="welcome-popup-title">참석 여부 체크</div>
     <div style="border-top:1px solid #e8e8e8;margin:0.8rem 0;"></div>
     <div class="welcome-popup-names">이현성 <span class="heart">♥</span> 김다윤</div>
     <div class="welcome-popup-info">
@@ -1768,7 +1768,7 @@ function lboxNav(dir){
     var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     if(isMobile){
       // 티맵 앱 딥링크 - 목적지 좌표로 직접 연결
-      var appUrl = 'tmap://route?goalname=메종드아나하&goalx=127.0289&goaly=37.5048';
+      var appUrl = 'tmap://route?goalname=메종드아나하&goalx=127.0289&goaly=37.5063';
       var webUrl = 'https://www.tmap.co.kr/search/searchMapDetailLsit.do?searchCate=place&searchKeyword=메종드아나하';
       // 앱 시도 후 1.5초 후 웹으로 fallback
       var timer = setTimeout(function(){ window.location.href = webUrl; }, 1500);
@@ -1908,34 +1908,77 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // 카카오톡 공유
 function shareKakao(){
-  if(typeof Kakao === 'undefined' || !Kakao.isInitialized()){
-    // SDK 초기화 후 공유
-    if(typeof Kakao !== 'undefined'){
+  const pageUrl = 'https://kdy012345.github.io/wedding/';
+
+  // 방법1: Kakao SDK sendScrap - OG 태그 기반으로 이미지+링크 카드 생성
+  if(typeof Kakao !== 'undefined'){
+    if(!Kakao.isInitialized()){
       Kakao.init('e4664a7a38c753ac8b404b9a00de890a');
-    } else {
-      showToast('잠시 후 다시 시도해주세요');
+    }
+    try {
+      Kakao.Share.sendScrap({
+        requestUrl: pageUrl,
+        templateId: undefined,
+        installTalk: true
+      });
       return;
+    } catch(e) {
+      // sendScrap 실패 시 sendDefault 시도
+      try {
+        Kakao.Share.sendDefault({
+          objectType: 'feed',
+          content: {
+            title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
+            description: '2026년 8월 23일 일요일 오후 2시 · 메종드아나하',
+            imageUrl: 'https://kdy012345.github.io/wedding/cover.jpg',
+            imageWidth: 1200,
+            imageHeight: 630,
+            link: {
+              mobileWebUrl: pageUrl,
+              webUrl: pageUrl
+            }
+          },
+          buttons: [{
+            title: '청첩장 보기',
+            link: {
+              mobileWebUrl: pageUrl,
+              webUrl: pageUrl
+            }
+          }]
+        });
+        return;
+      } catch(e2) {}
     }
   }
-  Kakao.Share.sendDefault({
-    objectType: 'feed',
-    content: {
-      title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
-      description: '2026년 8월 23일 일요일 오후 2시\n메종드아나하 B1F, 단독홀',
-      imageUrl: 'https://kdy012345.github.io/wedding/cover.jpg',
-      link: {
-        mobileWebUrl: 'https://kdy012345.github.io/wedding/',
-        webUrl: 'https://kdy012345.github.io/wedding/'
+
+  // 방법2: 카카오톡 URL 스킴 (모바일 앱 직접 호출)
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(isMobile){
+    const kakaoScheme = 'kakaolink://send?url=' + encodeURIComponent(pageUrl) +
+      '&text=' + encodeURIComponent('이현성 ♥ 김다윤 결혼식에 초대합니다\n' + pageUrl);
+    const el = document.createElement('a');
+    el.href = kakaoScheme;
+    el.click();
+    // 앱이 없을 경우 클립보드 복사 fallback
+    setTimeout(function(){
+      if(navigator.clipboard){
+        navigator.clipboard.writeText(pageUrl).then(function(){
+          showToast('링크가 복사되었습니다. 카카오톡에 붙여넣기 해주세요.');
+        });
       }
-    },
-    buttons: [{
-      title: '청첩장 보기',
-      link: {
-        mobileWebUrl: 'https://kdy012345.github.io/wedding/',
-        webUrl: 'https://kdy012345.github.io/wedding/'
-      }
-    }]
-  });
+    }, 1500);
+  } else {
+    // PC: 클립보드 복사
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(pageUrl).then(function(){
+        showToast('링크가 복사되었습니다. 카카오톡에 붙여넣기 해주세요.');
+      }).catch(function(){
+        prompt('아래 링크를 복사하여 카카오톡에 붙여넣기 해주세요.', pageUrl);
+      });
+    } else {
+      prompt('아래 링크를 복사하여 카카오톡에 붙여넣기 해주세요.', pageUrl);
+    }
+  }
 }
 document.querySelectorAll('.fade-in').forEach(el=>{
   new IntersectionObserver(([e],obs)=>{
@@ -2023,12 +2066,8 @@ document.querySelectorAll('.fade-in').forEach(el=>{
 
       const geocoder = new kakao.maps.services.Geocoder();
       geocoder.addressSearch('서울 강남구 언주로 517', function(result, status) {
-        let coords;
-        if(status === kakao.maps.services.Status.OK) {
-          coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        } else {
-          coords = new kakao.maps.LatLng(37.5048, 127.0333);
-        }
+        // 주소 검색 결과와 무관하게 메종드아나하 정확 좌표 사용
+        let coords = new kakao.maps.LatLng(37.5063, 127.0289);
 
         // 지도 중심을 마커보다 약간 아래로 → 마커가 상단에 보임
         const centerCoords = new kakao.maps.LatLng(
