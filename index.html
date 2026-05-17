@@ -6,14 +6,14 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
 <meta property="og:description" content="2026년 8월 23일 일요일 오후 2시&#10;메종드아나하, 서울">
-<meta property="og:image" content="https://kdy012345.github.io/wedding/cover.webp">
-<meta property="og:image:width" content="2000">
-<meta property="og:image:height" content="2984">
+<meta property="og:image" content="https://kdy012345.github.io/wedding/og-cover.webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:url" content="https://kdy012345.github.io/wedding/index.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
 <meta name="twitter:description" content="2026년 8월 23일 일요일 오후 2시&#10;메종드아나하, 서울">
-<meta name="twitter:image" content="https://kdy012345.github.io/wedding/cover.webp">
+<meta name="twitter:image" content="https://kdy012345.github.io/wedding/og-cover.webp">
 <title>이현성 ❤️ 김다윤</title>
 <!-- 갤러리 이미지 preload -->
 <link rel="preload" as="image" href="5.webp">
@@ -26,10 +26,11 @@
 <link rel="preload" as="image" href="16.webp">
 <link rel="preload" as="image" href="17.webp">
 <!-- 카카오 SDK (지도 + 공유) -->
-<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4" crossorigin="anonymous"></script>
 <script>
+  window.KAKAO_APP_KEY = 'e4664a7a38c753ac8b404b9a00de890a';
   if(typeof Kakao !== 'undefined' && !Kakao.isInitialized()){
-    Kakao.init('e4664a7a38c753ac8b404b9a00de890a');
+    Kakao.init(window.KAKAO_APP_KEY);
   }
 </script>
 <!-- 폰트 비동기 로드 (렌더 블로킹 방지) -->
@@ -1953,16 +1954,19 @@ window.addEventListener('DOMContentLoaded', () => {
 // 카카오톡 공유
 function shareKakao(){
   const pageUrl = 'https://kdy012345.github.io/wedding/index.html';
+  const ogImageUrl = 'https://kdy012345.github.io/wedding/og-cover.webp';
 
-  // Kakao SDK 및 Share 모듈 체크
-  if(typeof Kakao === 'undefined' || !Kakao.Share){
-    // SDK 재시도
-    if(typeof Kakao !== 'undefined' && !Kakao.isInitialized()){
-      Kakao.init('e4664a7a38c753ac8b404b9a00de890a');
-    }
-    if(typeof Kakao === 'undefined' || !Kakao.Share){
-      showKakaoGuide(); return;
-    }
+  // Kakao SDK 초기화 보장
+  if(typeof Kakao === 'undefined'){
+    showKakaoGuide(); return;
+  }
+  if(!Kakao.isInitialized()){
+    Kakao.init(window.KAKAO_APP_KEY || 'e4664a7a38c753ac8b404b9a00de890a');
+  }
+
+  // Share 모듈 존재 확인
+  if(!Kakao.Share){
+    showKakaoGuide(); return;
   }
 
   Kakao.Share.sendDefault({
@@ -1970,9 +1974,9 @@ function shareKakao(){
     content: {
       title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
       description: '2026년 8월 23일 일요일 오후 2시 · 메종드아나하, 서울',
-      imageUrl: 'https://kdy012345.github.io/wedding/cover.webp',
-      imageWidth: 2000,
-      imageHeight: 2984,
+      imageUrl: ogImageUrl,
+      imageWidth: 1200,
+      imageHeight: 630,
       link: {
         mobileWebUrl: pageUrl,
         webUrl: pageUrl
