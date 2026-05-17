@@ -6,14 +6,14 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
 <meta property="og:description" content="2026년 8월 23일 일요일 오후 2시&#10;메종드아나하, 서울">
-<meta property="og:image" content="https://kdy012345.github.io/wedding/og_cover.jpg">
-<meta property="og:image:width" content="800">
-<meta property="og:image:height" content="400">
+<meta property="og:image" content="https://kdy012345.github.io/wedding/cover.webp">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="2984">
 <meta property="og:url" content="https://kdy012345.github.io/wedding/index.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
 <meta name="twitter:description" content="2026년 8월 23일 일요일 오후 2시&#10;메종드아나하, 서울">
-<meta name="twitter:image" content="https://kdy012345.github.io/wedding/og_cover.jpg">
+<meta name="twitter:image" content="https://kdy012345.github.io/wedding/cover.webp">
 <title>이현성 ❤️ 김다윤</title>
 <!-- 갤러리 이미지 preload -->
 <link rel="preload" as="image" href="5.webp">
@@ -1950,7 +1950,7 @@ window.addEventListener('DOMContentLoaded', () => {
   buildGallery();
 });
 
-// 카카오톡 공유
+// 카카오톡 공유 (sharer 팝업 방식 - 친구 선택 후 OG 카드로 자동 전달)
 function shareKakao(){
   const pageUrl = 'https://kdy012345.github.io/wedding/index.html';
 
@@ -1958,26 +1958,9 @@ function shareKakao(){
     showKakaoGuide(); return;
   }
 
-  Kakao.Share.sendDefault({
-    objectType: 'feed',
-    content: {
-      title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
-      description: '2026년 8월 23일 일요일 오후 2시 · 메종드아나하, 서울',
-      imageUrl: 'https://kdy012345.github.io/wedding/og_cover.jpg',
-      imageWidth: 800,
-      imageHeight: 400,
-      link: {
-        mobileWebUrl: pageUrl,
-        webUrl: pageUrl
-      }
-    },
-    buttons: [{
-      title: '모바일 청첩장 보기',
-      link: {
-        mobileWebUrl: pageUrl,
-        webUrl: pageUrl
-      }
-    }]
+  Kakao.Share.sendScrap({
+    requestUrl: pageUrl,
+    templateId: undefined
   });
 }
 document.querySelectorAll('.fade-in').forEach(el=>{
