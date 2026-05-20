@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta property="og:type" content="website">
-<meta property="og:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
-<meta property="og:description" content="2026년 8월 23일 일요일 오후 2시&#10;메종드아나하, 서울">
+<meta property="og:title" content="현성 ♥ 다윤 결혼합니다">
+<meta property="og:description" content="2026-08-23 일요일 오후 2시&#10;메종드아나하, 서울">
 <meta property="og:image" content="https://kdy012345.github.io/wedding/og-cover.jpg">
 <meta property="og:image:width" content="800">
 <meta property="og:image:height" content="1200">
 <meta property="og:url" content="https://kdy012345.github.io/wedding/index.html">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="이현성 ♥ 김다윤 결혼식에 초대합니다">
-<meta name="twitter:description" content="2026년 8월 23일 일요일 오후 2시&#10;메종드아나하, 서울">
+<meta name="twitter:title" content="현성 ♥ 다윤 결혼합니다">
+<meta name="twitter:description" content="2026-08-23 일요일 오후 2시&#10;메종드아나하, 서울">
 <meta name="twitter:image" content="https://kdy012345.github.io/wedding/og-cover.jpg">
 <title>이현성 ❤️ 김다윤</title>
 <!-- 갤러리 이미지 preload -->
@@ -575,7 +575,7 @@ body{
 .f-input:focus{border-color:var(--sky-mid)}
 .f-input::placeholder{color:#ccc}
 .rsvp-submit{width:100%;padding:0.88rem;margin-top:1rem;background:var(--sky-mid);color:#fff;border:none;border-radius:4px;font-size:0.9rem;font-weight:500;font-family:'Noto Sans KR',sans-serif;cursor:pointer}
-.noshow-row{display:flex;align-items:center;gap:6px;margin-top:0.75rem;font-size:0.7rem;color:#bbb}
+.noshow-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:0.75rem;font-size:0.75rem;color:#aaa}
 .noshow-row input{accent-color:var(--sky-mid)}
 
 /* LIGHTBOX - 중복 CSS 제거 (위의 .lbox 스타일 사용) */
@@ -1518,6 +1518,7 @@ body.lbox-open .petals-container{
     </div>
     <div class="welcome-popup-desc">뜻 깊은 시작의 자리에<br>소중한 분들을 초대합니다.</div>
     <button class="welcome-popup-btn" onclick="onWelcomeRsvp()">참석여부 체크하기</button>
+    <div class="noshow-row" style="margin-top:0.8rem;"><input type="checkbox" id="noshowWelcome"><label for="noshowWelcome">오늘 하루 보지 않기</label></div>
   </div>
 </div>
 
@@ -1530,10 +1531,8 @@ body.lbox-open .petals-container{
     <div class="form-g"><label class="form-lbl">성함</label><input class="f-input" type="text" placeholder="성함을 입력해주세요"></div>
     <div class="form-g"><label class="form-lbl">참석 여부</label><div class="tog-grp"><button class="tog-btn on" onclick="tog(this)">참석</button><button class="tog-btn" onclick="tog(this)">불참석</button></div></div>
     <div class="form-g"><label class="form-lbl">참석 인원</label><input class="f-input" type="number" placeholder="본인 포함 총 참석인원"></div>
-    <div class="form-g"><label class="form-lbl">동행인</label><input class="f-input" type="text" placeholder="함께 오시는 분 성함"></div>
     <div class="form-g"><label class="form-lbl">식사 여부</label><div class="tog-grp"><button class="tog-btn on" onclick="tog(this)">예정</button><button class="tog-btn" onclick="tog(this)">안함</button><button class="tog-btn" onclick="tog(this)">미정</button></div></div>
     <button class="rsvp-submit" onclick="submitRsvp()">참석 의사 전달하기</button>
-    <div class="noshow-row"><input type="checkbox" id="noshow"><label for="noshow">오늘 하루 보지 않기</label></div>
   </div>
 </div>
 
@@ -1626,6 +1625,12 @@ function openModal(id){
   el.classList.add('on');
 }
 function closeModal(id){
+  if(id === 'rsvpModal'){
+    const cb = document.getElementById('noshow');
+    if(cb && cb.checked){
+      localStorage.setItem('rsvp_d', new Date().toDateString());
+    }
+  }
   const el=document.getElementById(id);
   el.classList.remove('on');
 }
@@ -1660,6 +1665,11 @@ function submitRsvp(){
 
 // ── 참석 여부 웰컴 팝업 ──
 function closeWelcomePopup(){
+  // 체크박스 확인 후 오늘 날짜 저장
+  const cb = document.getElementById('noshowWelcome');
+  if(cb && cb.checked){
+    localStorage.setItem('wedding_noshow', new Date().toDateString());
+  }
   const el = document.getElementById('welcomePopup');
   if(el){
     el.style.display = 'none';
@@ -1671,22 +1681,27 @@ function onWelcomeRsvp(){
   openModal('rsvpModal');
 }
 function showWelcomePopup(){
-  const hidden = localStorage.getItem('rsvp_d');
-  if(hidden === new Date().toDateString()) return;
+  // 오늘 날짜와 저장된 날짜 비교
+  const saved = localStorage.getItem('wedding_noshow');
+  const today = new Date().toDateString();
+  if(saved === today) return; // 오늘 이미 닫은 경우 표시 안 함
+
   const el = document.getElementById('welcomePopup');
   if(!el) return;
-  el.style.visibility = 'visible';
   el.style.display = 'flex';
+  el.style.visibility = 'visible';
+
+  // 배경 클릭 시 닫기
   el.addEventListener('click', function(e){
     if(e.target === el) closeWelcomePopup();
   }, { once: true });
 }
-// DOMContentLoaded 또는 이미 로드된 경우 모두 대응
-if(document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', function(){
-    setTimeout(showWelcomePopup, 1200);
-  });
-} else {
+
+// 페이지 로드 후 1.2초 뒤 팝업 표시
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(showWelcomePopup, 1200);
+});
+if(document.readyState !== 'loading'){
   setTimeout(showWelcomePopup, 1200);
 }
 
@@ -1931,7 +1946,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Gallery
-const galleryPhotos = ["5.webp","6.webp","3.webp","9.webp","10.webp","12.webp","14.webp","16.webp","17.webp","20.webp","7.webp","21.webp","23.webp","24.webp","25.webp","26.webp","27.webp","28.webp","29.webp","31.webp","32.webp","40.webp","33.webp","35.webp","38.webp","42.webp"];
+const galleryPhotos = ["5.webp","6.webp","3.webp","9.webp","10.webp","8.webp","12.webp","14.webp","16.webp","17.webp","20.webp","7.webp","21.webp","23.webp","24.webp","25.webp","26.webp","27.webp","28.webp","29.webp","31.webp","32.webp","33.webp","39.webp","35.webp","40.webp","38.webp","42.webp"];
 let galleryIdx = 0;
 
 // 갤러리 이미지 미리 preload
@@ -1987,8 +2002,8 @@ function shareKakao(){
   Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
-      title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
-      description: '2026년 8월 23일 일요일 오후 2시 · 메종드아나하, 서울',
+      title: '현성 ♥ 다윤 결혼합니다',
+      description: '2026-08-23 일요일 오후 2시\n메종드아나하, 서울',
       imageUrl: imageUrl,
       link: {
         mobileWebUrl: pageUrl,
@@ -2012,7 +2027,7 @@ function shareKakaoFallback(pageUrl){
   // 모바일 Web Share API 지원 시 시스템 공유시트 오픈 (카카오톡 선택 가능)
   if(navigator.share){
     navigator.share({
-      title: '이현성 ♥ 김다윤 결혼식에 초대합니다',
+      title: '현성 ♥ 다윤 결혼합니다',
       text: '2026년 8월 23일 일요일 오후 2시 · 메종드아나하, 서울',
       url: pageUrl
     }).catch(function(){});
