@@ -818,7 +818,7 @@ body { overflow-x: hidden; max-width: 100vw; }
 .tr-row span{color:#7a6e65;word-break:keep-all;}
 
 .map-btns-3{display:flex;gap:8px;padding:0 1.5rem;justify-content:center;margin-bottom:1rem;}
-.map-btn-3{flex:1;padding:0.65rem 0.3rem;border-radius:24px;font-size:0.75rem;text-align:center;text-decoration:none;border:1.5px solid #e0e0e0;background:#fff;color:#3a3a3a;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:500;font-family:'Noto Sans KR',sans-serif;}
+.map-btn-3{flex:0 0 auto;padding:0.65rem 0.8rem;border-radius:24px;font-size:0.82rem;white-space:nowrap;text-align:center;text-decoration:none;border:1.5px solid #e0e0e0;background:#fff;color:#3a3a3a;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:500;font-family:'Noto Sans KR',sans-serif;}
 .gb-cards-grid::-webkit-scrollbar{display:none}
 .contact-wrap{padding:0 1.5rem 1rem;background:#fff;}
 .contact-accordion{width:100%;padding:0.9rem 1.2rem;background:#f5f9fc;border:1px solid #d8e8f4;border-radius:4px;display:flex;justify-content:space-between;align-items:center;font-size:0.88rem;color:#5a5147;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
@@ -1643,44 +1643,26 @@ document.querySelectorAll('.modal-bg').forEach(el=>el.addEventListener('click',e
 function tog(btn){btn.closest('.tog-grp').querySelectorAll('.tog-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
 
 // RSVP - Firebase 저장은 module script에서 처리
-async function submitRsvp(){
+function submitRsvp(){
   // 폼 값 수집
-  const side = document.querySelector('#rsvpModal .tog-grp:nth-of-type(1) .tog-btn.on')?.textContent.trim() || '';
+  const side = document.querySelector('#rsvpModal .tog-grp:nth-of-type(1) .tog-btn.on')?.textContent || '';
   const name = document.querySelector('#rsvpModal .f-input[placeholder="성함을 입력해주세요"]')?.value.trim() || '';
-  const attend = document.querySelector('#rsvpModal .tog-grp:nth-of-type(2) .tog-btn.on')?.textContent.trim() || '';
-  const count = document.querySelector('#rsvpModal .f-input[type="number"]')?.value || '1';
+  const attend = document.querySelector('#rsvpModal .tog-grp:nth-of-type(2) .tog-btn.on')?.textContent || '';
+  const count = document.querySelector('#rsvpModal .f-input[type="number"]')?.value || '';
   const companion = document.querySelector('#rsvpModal .f-input[placeholder="함께 오시는 분 성함"]')?.value.trim() || '';
-  const meal = document.querySelector('#rsvpModal .tog-grp:nth-of-type(3) .tog-btn.on')?.textContent.trim() || '';
+  const meal = document.querySelector('#rsvpModal .tog-grp:nth-of-type(3) .tog-btn.on')?.textContent || '';
 
   if(!name){ showToast('성함을 입력해주세요'); return; }
 
-  // 버튼 비활성화 (중복 제출 방지)
-  const submitBtn = document.querySelector('#rsvpModal .rsvp-submit');
-  if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = '전달 중...'; }
-
-  try {
-    // Firebase module 로딩 대기 (최대 5초)
-    let waited = 0;
-    while(typeof window.saveRsvp !== 'function' && waited < 50){
-      await new Promise(r => setTimeout(r, 100));
-      waited++;
-    }
-
-    if(typeof window.saveRsvp === 'function'){
-      await window.saveRsvp({ side, name, attend, count, companion, meal });
-      const cb = document.getElementById('noshow');
-      if(cb && cb.checked) localStorage.setItem('rsvp_d', new Date().toDateString());
-      closeModal('rsvpModal');
-      showToast('참석 의사가 전달되었습니다 🤍');
-    } else {
-      showToast('잠시 후 다시 시도해주세요');
-    }
-  } catch(e) {
-    console.error('RSVP 제출 오류:', e);
-    showToast('오류가 발생했습니다. 다시 시도해주세요');
-  } finally {
-    if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = '참석 의사 전달하기'; }
+  // Firebase 저장 (module script의 함수 호출)
+  if(typeof window.saveRsvp === 'function'){
+    window.saveRsvp({ side, name, attend, count, companion, meal });
   }
+
+  if(document.getElementById('noshow').checked)
+    localStorage.setItem('rsvp_d', new Date().toDateString());
+  closeModal('rsvpModal');
+  showToast('참석 의사가 전달되었습니다 🤍');
 }
 // RSVP 자동팝업 비활성화
 
@@ -2206,19 +2188,17 @@ let currentEditId = null;
 
 // ── RSVP Firebase 저장 ──
 window.saveRsvp = async function({ side, name, attend, count, companion, meal }) {
-  const docData = {
-    side: side || '',
-    name: name || '',
-    attend: attend || '',
-    count: count ? parseInt(count) : 1,
-    companion: companion || '',
-    meal: meal || '',
-    createdAt: serverTimestamp()
-  };
-  console.log('RSVP 저장 시도:', docData);
-  const docRef = await addDoc(collection(db, 'rsvp'), docData);
-  console.log('RSVP 저장 완료, ID:', docRef.id);
-  return docRef;
+  try {
+    await addDoc(collection(db, 'rsvp'), {
+      side, name, attend,
+      count: count ? parseInt(count) : 1,
+      companion, meal,
+      createdAt: serverTimestamp()
+    });
+    console.log('RSVP 저장 완료:', name);
+  } catch(e) {
+    console.error('RSVP 저장 오류:', e);
+  }
 };
 
 // 실시간 메시지 불러오기
