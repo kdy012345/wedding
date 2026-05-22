@@ -1627,6 +1627,11 @@ function toggleAcc(btnId,bodyId){
 function openModal(id){
   const el=document.getElementById(id);
   el.classList.add('on');
+  // 모달 열릴 때 pinch-zoom 허용
+  document.documentElement.style.touchAction='pan-y pinch-zoom';
+  document.body.style.touchAction='pan-y pinch-zoom';
+  const wrap=document.querySelector('.wrap');
+  if(wrap) wrap.style.touchAction='pan-y pinch-zoom';
 }
 function closeModal(id){
   if(id === 'rsvpModal'){
@@ -1637,6 +1642,11 @@ function closeModal(id){
   }
   const el=document.getElementById(id);
   el.classList.remove('on');
+  // 모달 닫힐 때 원복
+  document.documentElement.style.touchAction='';
+  document.body.style.touchAction='';
+  const wrap=document.querySelector('.wrap');
+  if(wrap) wrap.style.touchAction='';
 }
 document.querySelectorAll('.modal-bg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)closeModal(el.id);}));
 
