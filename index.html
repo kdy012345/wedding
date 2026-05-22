@@ -7,7 +7,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="현성 ♥ 다윤 결혼합니다">
 <meta property="og:description" content="2026-08-23 일요일 오후 2시&#10;메종드아나하, 서울">
-<meta property="og:image" content="https://kdy012345.github.io/wedding/og-cover2.jpg">
+<meta property="og:image" content="https://kdy012345.github.io/wedding/og-cover.jpg">
 <meta property="og:image:width" content="800">
 <meta property="og:image:height" content="1200">
 <meta property="og:url" content="https://kdy012345.github.io/wedding/">
@@ -15,7 +15,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="현성 ♥ 다윤 결혼합니다">
 <meta name="twitter:description" content="2026-08-23 일요일 오후 2시&#10;메종드아나하, 서울">
-<meta name="twitter:image" content="https://kdy012345.github.io/wedding/og-cover2.jpg">
+<meta name="twitter:image" content="https://kdy012345.github.io/wedding/og-cover.jpg">
 <title>이현성 ❤️ 김다윤</title>
 <!-- 갤러리 이미지 preload -->
 <link rel="preload" as="image" href="5.webp">
@@ -71,7 +71,7 @@ html { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
 }
 html{
   min-height:100%;
-  touch-action:pan-y;
+  touch-action:pan-y pinch-zoom;
   background:#555;
 }
 body{
@@ -82,7 +82,7 @@ body{
   display:flex;
   justify-content:center;
   align-items:flex-start;
-  touch-action:pan-y;
+  touch-action:pan-y pinch-zoom;
 }
 .wrap{
   width:390px;
@@ -92,7 +92,7 @@ body{
   position:relative;
   overflow-x:hidden;
   min-height:100dvh;
-  touch-action:pan-y;
+  touch-action:pan-y pinch-zoom;
   box-shadow:0 0 60px rgba(0,0,0,0.5);
   flex-shrink:0;
 }
@@ -1627,11 +1627,6 @@ function toggleAcc(btnId,bodyId){
 function openModal(id){
   const el=document.getElementById(id);
   el.classList.add('on');
-  // 모달 열릴 때 pinch-zoom 허용
-  document.documentElement.style.touchAction='pan-y pinch-zoom';
-  document.body.style.touchAction='pan-y pinch-zoom';
-  const wrap=document.querySelector('.wrap');
-  if(wrap) wrap.style.touchAction='pan-y pinch-zoom';
 }
 function closeModal(id){
   if(id === 'rsvpModal'){
@@ -1642,11 +1637,6 @@ function closeModal(id){
   }
   const el=document.getElementById(id);
   el.classList.remove('on');
-  // 모달 닫힐 때 원복
-  document.documentElement.style.touchAction='';
-  document.body.style.touchAction='';
-  const wrap=document.querySelector('.wrap');
-  if(wrap) wrap.style.touchAction='';
 }
 document.querySelectorAll('.modal-bg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)closeModal(el.id);}));
 
@@ -1998,7 +1988,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // 카카오톡 공유
 function shareKakao(){
   const pageUrl = 'https://kdy012345.github.io/wedding/index.html';
-  const imageUrl = 'https://kdy012345.github.io/wedding/og-cover2.jpg';
+  const imageUrl = 'https://kdy012345.github.io/wedding/og-cover.jpg';
 
   // Kakao SDK가 없으면 fallback
   if(typeof Kakao === 'undefined'){
