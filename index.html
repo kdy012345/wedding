@@ -10,7 +10,8 @@
 <meta property="og:image" content="https://kdy012345.github.io/wedding/og-cover2.jpg">
 <meta property="og:image:width" content="800">
 <meta property="og:image:height" content="1200">
-<meta property="og:url" content="https://kdy012345.github.io/wedding/index.html">
+<meta property="og:url" content="https://kdy012345.github.io/wedding/">
+<link rel="canonical" href="https://kdy012345.github.io/wedding/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="현성 ♥ 다윤 결혼합니다">
 <meta name="twitter:description" content="2026-08-23 일요일 오후 2시&#10;메종드아나하, 서울">
@@ -1825,7 +1826,7 @@ function lboxNav(dir){
 
 // Copy
 function copyText(t){navigator.clipboard.writeText(t).then(()=>showToast('복사되었습니다'));}
-function copyLink(){navigator.clipboard.writeText(location.href).then(()=>showToast('주소가 복사되었습니다'));}
+function copyLink(){var canonical='https://kdy012345.github.io/wedding/';navigator.clipboard.writeText(canonical).then(()=>showToast('주소가 복사되었습니다'));}
 
 // Toast
 function showToast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),2500);}
