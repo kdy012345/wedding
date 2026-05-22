@@ -1660,7 +1660,8 @@ function submitRsvp(){
     window.saveRsvp({ side, name, attend, count, companion, meal });
   }
 
-  if(document.getElementById('noshow').checked)
+  const noshowCb = document.getElementById('noshow');
+  if(noshowCb && noshowCb.checked)
     localStorage.setItem('rsvp_d', new Date().toDateString());
   closeModal('rsvpModal');
   showToast('참석 의사가 전달되었습니다 🤍');
