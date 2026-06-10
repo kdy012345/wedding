@@ -428,15 +428,40 @@ body{
 .gb-thankyou{font-family:'Noto Serif KR',serif;font-size:1.2rem;color:var(--sky-mid);text-align:center;margin-bottom:0.3rem;letter-spacing:0.35em;font-weight:600;}
 .gb-heart{text-align:center;font-size:1.4rem;color:#3a3a3a;margin-bottom:1.8rem;line-height:1}
 .gb-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 0 14px;}
-.gb-card-new{border-radius:8px;padding:0.9rem 0.8rem;display:flex;flex-direction:column;justify-content:space-between;min-height:130px;box-shadow:2px 3px 8px rgba(0,0,0,0.1);}
+.gb-card-new{border-radius:8px;padding:0.9rem 0.8rem;display:flex;flex-direction:column;justify-content:space-between;height:130px;box-shadow:2px 3px 8px rgba(0,0,0,0.1);transition:height 0.3s ease;}
+.gb-card-new.expanded{height:auto;}
+.gb-card-new .gc-msg-wrap{
+  flex:1;
+  overflow:hidden;
+  position:relative;
+  min-height:0;
+}
+.gb-card-new.expanded .gc-msg-wrap{overflow:visible;}
 .gb-card-new .gc-msg{
   font-size:0.72rem;
   color:#3a3a3a;
   line-height:1.6;
-  flex:1;
   font-family:'Noto Serif KR',serif;
   word-break:break-all;
+  display:-webkit-box;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
 }
+.gb-card-new.expanded .gc-msg{
+  display:block;
+  overflow:visible;
+  -webkit-line-clamp:unset;
+}
+.gc-toggle-btn{
+  background:none;border:none;
+  font-size:0.6rem;color:#aaa;
+  cursor:pointer;padding:2px 0 0;
+  font-family:'Noto Sans KR',sans-serif;
+  display:none;
+  text-align:left;
+}
+.gc-toggle-btn.visible{display:inline-block;}
 .gb-card-new .gc-bottom{
   margin-top:0.6rem;
   border-top:1px solid #e0e0e0;
@@ -2212,8 +2237,11 @@ onSnapshot(q, (snapshot) => {
     const g = d.data();
     const bg = postColors[i % postColors.length];
     const dateStr = g.createdAt ? new Date(g.createdAt.seconds * 1000).toLocaleDateString('ko-KR') : '';
-    return `<div class="gb-card-new" style="background:${bg}">
-      <div class="gc-msg" style="font-size:0.75rem;color:#333;line-height:1.6;flex:1">${g.msg.replace(/\n/g,'<br>')}</div>
+    return `<div class="gb-card-new" id="gbcard-${d.id}" style="background:${bg}">
+      <div class="gc-msg-wrap">
+        <div class="gc-msg" id="gcmsg-${d.id}">${g.msg.replace(/\n/g,'<br>')}</div>
+        <button class="gc-toggle-btn" id="gctoggle-${d.id}" onclick="window.toggleGbCard('${d.id}')">더보기 ▾</button>
+      </div>
       <div class="gc-bottom" style="margin-top:0.5rem;padding-top:0.4rem;border-top:1px solid rgba(0,0,0,0.08)">
         <div class="gc-name" style="font-size:0.7rem;color:#555;margin-bottom:0.2rem">${g.name}</div>
         <div style="display:flex;justify-content:space-between;align-items:center">
@@ -2223,7 +2251,37 @@ onSnapshot(q, (snapshot) => {
       </div>
     </div>`;
   }).join('');
+
+  // 더보기 버튼 표시 여부 판단 (렌더 후 실행)
+  requestAnimationFrame(() => {
+    snapshot.docs.forEach((d) => {
+      const msgEl = document.getElementById('gcmsg-' + d.id);
+      const toggleBtn = document.getElementById('gctoggle-' + d.id);
+      if (msgEl && toggleBtn) {
+        // scrollHeight > clientHeight 이면 내용이 잘린 것
+        if (msgEl.scrollHeight > msgEl.clientHeight + 2) {
+          toggleBtn.classList.add('visible');
+        }
+      }
+    });
+  });
 });
+
+// 카드 펼치기/접기
+window.toggleGbCard = function(id) {
+  const card = document.getElementById('gbcard-' + id);
+  const msgEl = document.getElementById('gcmsg-' + id);
+  const toggleBtn = document.getElementById('gctoggle-' + id);
+  if (!card || !msgEl || !toggleBtn) return;
+  const isExpanded = card.classList.contains('expanded');
+  if (isExpanded) {
+    card.classList.remove('expanded');
+    toggleBtn.textContent = '더보기 ▾';
+  } else {
+    card.classList.add('expanded');
+    toggleBtn.textContent = '접기 ▴';
+  }
+};
 
 // 메시지 등록
 window.addGb = async function() {
