@@ -428,31 +428,24 @@ body{
 .gb-thankyou{font-family:'Noto Serif KR',serif;font-size:1.2rem;color:var(--sky-mid);text-align:center;margin-bottom:0.3rem;letter-spacing:0.35em;font-weight:600;}
 .gb-heart{text-align:center;font-size:1.4rem;color:#3a3a3a;margin-bottom:1.8rem;line-height:1}
 .gb-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 0 14px;}
-.gb-card-new{border-radius:8px;padding:0.9rem 0.8rem 0.7rem;display:flex;flex-direction:column;height:160px;box-shadow:2px 3px 8px rgba(0,0,0,0.1);transition:height 0.3s ease;}
-.gb-card-new.expanded{height:auto;}
+.gb-card-new{border-radius:8px;padding:0.9rem 0.8rem 0.7rem;display:flex;flex-direction:column;box-shadow:2px 3px 8px rgba(0,0,0,0.1);}
 .gb-card-new .gc-msg-wrap{
   flex:1;
-  overflow:hidden;
-  min-height:0;
   display:flex;
   flex-direction:column;
 }
-.gb-card-new.expanded .gc-msg-wrap{overflow:visible;}
 .gb-card-new .gc-msg{
   font-size:0.72rem;
   color:#3a3a3a;
   line-height:1.6;
   font-family:'Noto Serif KR',serif;
   word-break:break-all;
+  max-height:4.8em;
   overflow:hidden;
-  display:-webkit-box;
-  -webkit-line-clamp:3;
-  -webkit-box-orient:vertical;
 }
 .gb-card-new.expanded .gc-msg{
-  display:block;
+  max-height:none;
   overflow:visible;
-  -webkit-line-clamp:unset;
 }
 .gc-toggle-btn{
   background:none;border:none;
@@ -2239,14 +2232,10 @@ onSnapshot(q, (snapshot) => {
     const g = d.data();
     const bg = postColors[i % postColors.length];
     const dateStr = g.createdAt ? new Date(g.createdAt.seconds * 1000).toLocaleDateString('ko-KR') : '';
-    // 글자 수 or 줄 수 기준으로 더보기 필요 여부 판단
-    const lineCount = g.msg.split('\n').length;
-    const charCount = g.msg.length;
-    const needToggle = lineCount > 3 || charCount > 40;
     return `<div class="gb-card-new" id="gbcard-${d.id}" style="background:${bg}">
       <div class="gc-msg-wrap">
         <div class="gc-msg" id="gcmsg-${d.id}">${g.msg.replace(/\n/g,'<br>')}</div>
-        <button class="gc-toggle-btn${needToggle ? ' visible' : ''}" id="gctoggle-${d.id}" onclick="window.toggleGbCard('${d.id}')">더보기 ▾</button>
+        <button class="gc-toggle-btn" id="gctoggle-${d.id}" onclick="window.toggleGbCard('${d.id}')">더보기 ▾</button>
       </div>
       <div class="gc-bottom" style="margin-top:0.5rem;padding-top:0.4rem;border-top:1px solid rgba(0,0,0,0.08)">
         <div class="gc-name" style="font-size:0.7rem;color:#555;margin-bottom:0.2rem">${g.name}</div>
@@ -2257,6 +2246,21 @@ onSnapshot(q, (snapshot) => {
       </div>
     </div>`;
   }).join('');
+
+  // DOM 렌더 후 실제 높이 비교로 더보기 버튼 표시 여부 결정
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      snapshot.docs.forEach((d) => {
+        const msgEl = document.getElementById('gcmsg-' + d.id);
+        const toggleBtn = document.getElementById('gctoggle-' + d.id);
+        if (!msgEl || !toggleBtn) return;
+        // scrollHeight가 max-height(4.8em)보다 크면 내용이 잘린 것
+        if (msgEl.scrollHeight > msgEl.clientHeight + 1) {
+          toggleBtn.classList.add('visible');
+        }
+      });
+    });
+  });
 });
 
 // 카드 펼치기/접기
