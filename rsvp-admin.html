@@ -8,129 +8,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #f5f7fa; color: #333; }
 
-  header {
-    background: #fff;
-    border-bottom: 1px solid #e8e8e8;
-    padding: 1.2rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-  header h1 { font-size: 1.1rem; font-weight: 600; color: #4a90b8; }
-  header span { font-size: 0.8rem; color: #aaa; }
-
-  .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }
-
-  /* 요약 카드 */
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.8rem;
-    margin-bottom: 1.5rem;
-  }
-  .summary-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 1rem 1.2rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    text-align: center;
-  }
-  .summary-card .label { font-size: 0.7rem; color: #999; margin-bottom: 0.3rem; }
-  .summary-card .value { font-size: 1.6rem; font-weight: 700; color: #4a90b8; }
-  .summary-card .sub { font-size: 0.65rem; color: #bbb; margin-top: 0.2rem; }
-  .summary-card.groom .value { color: #5b8cdb; }
-  .summary-card.bride .value { color: #d97b8a; }
-
-  /* 필터 */
-  .filter-bar {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .filter-btn {
-    padding: 0.35rem 0.9rem;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    background: #fff;
-    font-size: 0.75rem;
-    cursor: pointer;
-    color: #555;
-    transition: all 0.15s;
-  }
-  .filter-btn.active { background: #4a90b8; color: #fff; border-color: #4a90b8; }
-  .filter-btn.bride-active { background: #d97b8a; color: #fff; border-color: #d97b8a; }
-
-  .search-box {
-    margin-left: auto;
-    padding: 0.35rem 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    width: 140px;
-    outline: none;
-  }
-
-  /* 테이블 */
-  .table-wrap {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    overflow: hidden;
-  }
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { background: #f8f9fb; }
-  th {
-    padding: 0.75rem 1rem;
-    font-size: 0.72rem;
-    color: #888;
-    font-weight: 600;
-    text-align: left;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  td {
-    padding: 0.75rem 1rem;
-    font-size: 0.8rem;
-    border-bottom: 1px solid #f8f8f8;
-    vertical-align: middle;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #fafbfc; }
-
-  .badge {
-    display: inline-block;
-    padding: 0.2rem 0.55rem;
-    border-radius: 10px;
-    font-size: 0.68rem;
-    font-weight: 600;
-  }
-  .badge.attend { background: #e8f5e9; color: #2e7d32; }
-  .badge.notattend { background: #fce4ec; color: #c62828; }
-  .badge.unknown { background: #f5f5f5; color: #999; }
-  .badge.groom { background: #e3f0ff; color: #1a5fa8; }
-  .badge.bride { background: #fce8ec; color: #b5364a; }
-
-  .count-num { font-weight: 700; color: #4a90b8; }
-
-  /* 로딩 */
-  .loading {
-    text-align: center;
-    padding: 3rem;
-    color: #bbb;
-    font-size: 0.85rem;
-  }
-
-  .empty {
-    text-align: center;
-    padding: 3rem;
-    color: #ccc;
-    font-size: 0.82rem;
-  }
-
-  /* 날짜 */
-  .date-small { font-size: 0.68rem; color: #bbb; }
-
   /* 비밀번호 화면 */
   .lock-screen {
     position: fixed; inset: 0;
@@ -139,40 +16,22 @@
     z-index: 999;
   }
   .lock-box {
-    background: #fff;
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    text-align: center;
-    width: 280px;
+    background: #fff; border-radius: 16px; padding: 2.5rem 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; width: 280px;
   }
   .lock-box .lock-icon { font-size: 2rem; margin-bottom: 0.8rem; }
   .lock-box h2 { font-size: 1rem; color: #333; margin-bottom: 0.3rem; }
   .lock-box p { font-size: 0.75rem; color: #aaa; margin-bottom: 1.5rem; }
   .lock-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1.5px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    text-align: center;
-    letter-spacing: 0.3em;
-    outline: none;
-    margin-bottom: 0.8rem;
-    transition: border-color 0.2s;
+    width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #e0e0e0;
+    border-radius: 10px; font-size: 1.1rem; text-align: center;
+    letter-spacing: 0.3em; outline: none; margin-bottom: 0.8rem; transition: border-color 0.2s;
   }
   .lock-input:focus { border-color: #4a90b8; }
   .lock-input.error { border-color: #e57373; animation: shake 0.3s; }
   .lock-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background: #4a90b8;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    font-weight: 600;
+    width: 100%; padding: 0.75rem; background: #4a90b8; color: #fff;
+    border: none; border-radius: 10px; font-size: 0.9rem; cursor: pointer; font-weight: 600;
   }
   .lock-btn:hover { background: #3a7fa8; }
   .lock-error { font-size: 0.72rem; color: #e57373; margin-top: 0.5rem; display: none; }
@@ -182,8 +41,58 @@
     75% { transform: translateX(6px); }
   }
 
+  header {
+    background: #fff; border-bottom: 1px solid #e8e8e8;
+    padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 0.6rem;
+  }
+  header h1 { font-size: 1.1rem; font-weight: 600; color: #4a90b8; }
+  header span { font-size: 0.8rem; color: #aaa; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+  .summary-card {
+    background: #fff; border-radius: 12px; padding: 1rem 1.2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;
+  }
+  .summary-card .label { font-size: 0.7rem; color: #999; margin-bottom: 0.3rem; }
+  .summary-card .value { font-size: 1.6rem; font-weight: 700; color: #4a90b8; }
+  .summary-card .sub { font-size: 0.65rem; color: #bbb; margin-top: 0.2rem; }
+  .summary-card.groom .value { color: #5b8cdb; }
+  .summary-card.bride .value { color: #d97b8a; }
+
+  .filter-bar { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
+  .filter-btn {
+    padding: 0.35rem 0.9rem; border-radius: 20px; border: 1px solid #ddd;
+    background: #fff; font-size: 0.75rem; cursor: pointer; color: #555; transition: all 0.15s;
+  }
+  .filter-btn.active { background: #4a90b8; color: #fff; border-color: #4a90b8; }
+  .filter-btn.bride-active { background: #d97b8a; color: #fff; border-color: #d97b8a; }
+  .search-box {
+    margin-left: auto; padding: 0.35rem 0.8rem; border: 1px solid #ddd;
+    border-radius: 20px; font-size: 0.75rem; width: 140px; outline: none;
+  }
+
+  .table-wrap { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: #f8f9fb; }
+  th { padding: 0.75rem 1rem; font-size: 0.72rem; color: #888; font-weight: 600; text-align: left; border-bottom: 1px solid #f0f0f0; }
+  td { padding: 0.75rem 1rem; font-size: 0.8rem; border-bottom: 1px solid #f8f8f8; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafbfc; }
+
+  .badge { display: inline-block; padding: 0.2rem 0.55rem; border-radius: 10px; font-size: 0.68rem; font-weight: 600; }
+  .badge.attend { background: #e8f5e9; color: #2e7d32; }
+  .badge.notattend { background: #fce4ec; color: #c62828; }
+  .badge.unknown { background: #f5f5f5; color: #999; }
+  .badge.groom { background: #e3f0ff; color: #1a5fa8; }
+  .badge.bride { background: #fce8ec; color: #b5364a; }
+  .count-num { font-weight: 700; color: #4a90b8; }
+  .loading { text-align: center; padding: 3rem; color: #bbb; font-size: 0.85rem; }
+  .empty { text-align: center; padding: 3rem; color: #ccc; font-size: 0.82rem; }
+  .date-small { font-size: 0.68rem; color: #bbb; }
+
   @media (max-width: 500px) {
-    .summary-grid { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
     .summary-card { padding: 0.8rem 0.5rem; }
     .summary-card .value { font-size: 1.3rem; }
     th, td { padding: 0.6rem 0.6rem; font-size: 0.72rem; }
@@ -212,8 +121,6 @@
 </header>
 
 <div class="container">
-
-  <!-- 요약 -->
   <div class="summary-grid">
     <div class="summary-card">
       <div class="label">총 참석 인원</div>
@@ -232,50 +139,40 @@
     </div>
   </div>
 
-  <!-- 필터 -->
   <div class="filter-bar">
-    <button class="filter-btn active" onclick="setFilter('all')">전체</button>
-    <button class="filter-btn" onclick="setFilter('groom')">신랑 측</button>
-    <button class="filter-btn" onclick="setFilter('bride')">신부 측</button>
-    <button class="filter-btn" onclick="setFilter('attend')">참석</button>
-    <button class="filter-btn" onclick="setFilter('notattend')">불참</button>
+    <button class="filter-btn active" id="btn-all"       onclick="setFilter('all')">전체</button>
+    <button class="filter-btn"        id="btn-groom"     onclick="setFilter('groom')">신랑 측</button>
+    <button class="filter-btn"        id="btn-bride"     onclick="setFilter('bride')">신부 측</button>
+    <button class="filter-btn"        id="btn-attend"    onclick="setFilter('attend')">참석</button>
+    <button class="filter-btn"        id="btn-notattend" onclick="setFilter('notattend')">불참</button>
     <input class="search-box" type="text" id="search-input" placeholder="🔍 이름 검색" oninput="renderTable()">
   </div>
 
-  <!-- 테이블 -->
   <div class="table-wrap">
     <div class="loading" id="loading">데이터 불러오는 중...</div>
     <table id="rsvp-table" style="display:none">
       <thead>
         <tr>
-          <th>#</th>
-          <th>이름</th>
-          <th>구분</th>
-          <th>참석여부</th>
-          <th>인원</th>
-          <th>동반자</th>
-          <th>식사</th>
-          <th>제출일시</th>
+          <th>#</th><th>이름</th><th>구분</th><th>참석여부</th>
+          <th>인원</th><th>동반자</th><th>식사</th><th>제출일시</th>
         </tr>
       </thead>
       <tbody id="rsvp-tbody"></tbody>
     </table>
     <div class="empty" id="empty-msg" style="display:none">조건에 맞는 데이터가 없어요</div>
   </div>
-
 </div>
 
-<!-- 비밀번호 체크 -->
 <script>
+  /* ── 비밀번호 ── */
   const CORRECT_PW = '0428';
   if (sessionStorage.getItem('rsvp_auth') === 'ok') {
     document.getElementById('lock-screen').style.display = 'none';
   }
   function checkPw() {
-    const val = document.getElementById('lock-input').value;
     const input = document.getElementById('lock-input');
     const errEl = document.getElementById('lock-error');
-    if (val === CORRECT_PW) {
+    if (input.value === CORRECT_PW) {
       sessionStorage.setItem('rsvp_auth', 'ok');
       document.getElementById('lock-screen').style.display = 'none';
     } else {
@@ -286,119 +183,121 @@
       input.focus();
     }
   }
-</script>
 
-<!-- Firebase -->
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, getDocs, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  /* ── 상태 ── */
+  let allData = [];
+  let currentFilter = 'all';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCrgBelJ3t3VUOTfKlG1TDk3RVU0jsye0A",
-  authDomain: "wedding-7797c.firebaseapp.com",
-  projectId: "wedding-7797c",
-  storageBucket: "wedding-7797c.firebasestorage.app",
-  messagingSenderId: "509284927615",
-  appId: "1:509284927615:web:20e7782565f395fb3ed74a"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let allData = [];
-let currentFilter = 'all';
-
-// 데이터 불러오기
-const q = query(collection(db, 'rsvp'), orderBy('createdAt', 'desc'));
-const snapshot = await getDocs(q);
-
-allData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-// 요약 집계
-updateSummary();
-document.getElementById('loading').style.display = 'none';
-document.getElementById('rsvp-table').style.display = 'table';
-renderTable();
-
-function updateSummary() {
-  let total = 0, groom = 0, bride = 0;
-  allData.forEach(d => {
-    if (d.attend === '참석' || d.attend === '예' || d.attend === 'yes' || d.attend === true) {
-      const cnt = parseInt(d.count) || 1;
-      total += cnt;
-      if (d.side === '신랑측' || d.side === '신랑' ) groom += cnt;
-      else if (d.side === '신부측' || d.side === '신부') bride += cnt;
-    }
-  });
-  document.getElementById('total-count').textContent = total;
-  document.getElementById('groom-count').textContent = groom;
-  document.getElementById('bride-count').textContent = bride;
-}
-
-window.setFilter = function(f) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.classList.remove('active', 'bride-active');
-  });
-  const btnMap = { all: 0, groom: 1, bride: 2, attend: 3, notattend: 4 };
-  const btns = document.querySelectorAll('.filter-btn');
-  if (f === 'bride') btns[btnMap[f]].classList.add('bride-active');
-  else btns[btnMap[f]].classList.add('active');
-  renderTable();
-};
-
-window.renderTable = function() {
-  const keyword = document.getElementById('search-input').value.trim().toLowerCase();
-
-  let filtered = allData.filter(d => {
-    const name = (d.name || '').toLowerCase();
-    if (keyword && !name.includes(keyword)) return false;
-    if (currentFilter === 'groom') return d.side === '신랑측' || d.side === '신랑';
-    if (currentFilter === 'bride') return d.side === '신부측' || d.side === '신부';
-    if (currentFilter === 'attend') return d.attend === '참석' || d.attend === '예' || d.attend === 'yes' || d.attend === true;
-    if (currentFilter === 'notattend') return d.attend === '불참' || d.attend === '아니오' || d.attend === 'no' || d.attend === false;
-    return true;
-  });
-
-  const tbody = document.getElementById('rsvp-tbody');
-  const emptyMsg = document.getElementById('empty-msg');
-
-  if (filtered.length === 0) {
-    tbody.innerHTML = '';
-    emptyMsg.style.display = 'block';
-    return;
+  /* ── 필터 ── */
+  function setFilter(f) {
+    currentFilter = f;
+    ['all','groom','bride','attend','notattend'].forEach(k => {
+      const btn = document.getElementById('btn-' + k);
+      btn.classList.remove('active','bride-active');
+    });
+    const btn = document.getElementById('btn-' + f);
+    if (f === 'bride') btn.classList.add('bride-active');
+    else btn.classList.add('active');
+    renderTable();
   }
-  emptyMsg.style.display = 'none';
+  window.setFilter = setFilter;
 
-  const attendLabels = ['참석', '예', 'yes', true];
+  /* ── 테이블 렌더 ── */
+  function renderTable() {
+    const keyword = (document.getElementById('search-input').value || '').trim().toLowerCase();
+    const attendLabels = ['참석', '예', 'yes', true];
 
-  tbody.innerHTML = filtered.map((d, i) => {
-    const isAttend = attendLabels.includes(d.attend);
-    const attendBadge = isAttend
-      ? '<span class="badge attend">참석</span>'
-      : (d.attend ? '<span class="badge notattend">불참</span>' : '<span class="badge unknown">미정</span>');
+    const filtered = allData.filter(d => {
+      const name = (d.name || '').toLowerCase();
+      if (keyword && !name.includes(keyword)) return false;
+      if (currentFilter === 'groom')     return d.side === '신랑측' || d.side === '신랑';
+      if (currentFilter === 'bride')     return d.side === '신부측' || d.side === '신부';
+      if (currentFilter === 'attend')    return attendLabels.includes(d.attend);
+      if (currentFilter === 'notattend') return !attendLabels.includes(d.attend) && d.attend;
+      return true;
+    });
 
-    const isGroom = d.side === '신랑측' || d.side === '신랑';
-    const sideBadge = isGroom
-      ? '<span class="badge groom">신랑 측</span>'
-      : '<span class="badge bride">신부 측</span>';
+    const tbody   = document.getElementById('rsvp-tbody');
+    const emptyEl = document.getElementById('empty-msg');
+    const tableEl = document.getElementById('rsvp-table');
 
-    const dateStr = d.createdAt
-      ? new Date(d.createdAt.seconds * 1000).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-      : '—';
+    if (filtered.length === 0) {
+      tbody.innerHTML = '';
+      emptyEl.style.display = 'block';
+      tableEl.style.display = 'none';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    tableEl.style.display = 'table';
 
-    return `<tr>
-      <td style="color:#bbb">${i + 1}</td>
-      <td><strong>${d.name || '—'}</strong></td>
-      <td>${sideBadge}</td>
-      <td>${attendBadge}</td>
-      <td><span class="count-num">${d.count || 1}</span>명</td>
-      <td style="color:#777">${d.companion || '—'}</td>
-      <td style="color:#777">${d.meal || '—'}</td>
-      <td class="date-small">${dateStr}</td>
-    </tr>`;
-  }).join('');
-};
+    tbody.innerHTML = filtered.map((d, i) => {
+      const isAttend = attendLabels.includes(d.attend);
+      const attendBadge = isAttend
+        ? '<span class="badge attend">참석</span>'
+        : (d.attend ? '<span class="badge notattend">불참</span>' : '<span class="badge unknown">미정</span>');
+      const isGroom = d.side === '신랑측' || d.side === '신랑';
+      const sideBadge = isGroom
+        ? '<span class="badge groom">신랑 측</span>'
+        : '<span class="badge bride">신부 측</span>';
+      const dateStr = d.createdAt
+        ? new Date(d.createdAt.seconds * 1000).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : '—';
+      return `<tr>
+        <td style="color:#bbb">${i+1}</td>
+        <td><strong>${d.name||'—'}</strong></td>
+        <td>${sideBadge}</td>
+        <td>${attendBadge}</td>
+        <td><span class="count-num">${d.count||1}</span>명</td>
+        <td style="color:#777">${d.companion||'—'}</td>
+        <td style="color:#777">${d.meal||'—'}</td>
+        <td class="date-small">${dateStr}</td>
+      </tr>`;
+    }).join('');
+  }
+  window.renderTable = renderTable;
+
+  /* ── Firebase 동적 로드 ── */
+  async function loadData() {
+    const { initializeApp }       = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, orderBy, query }
+                                  = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+
+    const app = initializeApp({
+      apiKey:            "AIzaSyCrgBelJ3t3VUOTfKlG1TDk3RVU0jsye0A",
+      authDomain:        "wedding-7797c.firebaseapp.com",
+      projectId:         "wedding-7797c",
+      storageBucket:     "wedding-7797c.firebasestorage.app",
+      messagingSenderId: "509284927615",
+      appId:             "1:509284927615:web:20e7782565f395fb3ed74a"
+    });
+    const db = getFirestore(app);
+    const snap = await getDocs(query(collection(db, 'rsvp'), orderBy('createdAt', 'desc')));
+
+    allData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    /* 요약 집계 */
+    let total = 0, groom = 0, bride = 0;
+    const attendLabels = ['참석', '예', 'yes', true];
+    allData.forEach(d => {
+      if (attendLabels.includes(d.attend)) {
+        const cnt = parseInt(d.count) || 1;
+        total += cnt;
+        if (d.side === '신랑측' || d.side === '신랑') groom += cnt;
+        else if (d.side === '신부측' || d.side === '신부') bride += cnt;
+      }
+    });
+    document.getElementById('total-count').textContent = total;
+    document.getElementById('groom-count').textContent = groom;
+    document.getElementById('bride-count').textContent = bride;
+
+    document.getElementById('loading').style.display = 'none';
+    renderTable();
+  }
+
+  loadData().catch(err => {
+    document.getElementById('loading').textContent = '데이터를 불러오지 못했어요 😢';
+    console.error(err);
+  });
 </script>
 </body>
 </html>
